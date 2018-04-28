@@ -8,7 +8,7 @@ import com.oracle.labor.common.util.DBCommon;
 
 
 public class EducationallevelOperation implements IAppConfig{
-	private static HashMap<String,String> map = new HashMap();
+	private static HashMap<String,String> map = new HashMap<>();
 	public boolean init() {
 		String sql = "select cd_id,cd_name from cdg_educationallevel where cd_id like '%0' order by cd_index ";
 		DBCommon mydb = new DBCommon();

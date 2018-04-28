@@ -11,7 +11,7 @@ import com.oracle.labor.common.util.DBCommon;
 
 
 public class RegioncodeOperation implements IAppConfig{
-	private static HashMap<String,String> map = new HashMap();
+	private static HashMap<String,String> map = new HashMap<>();
 	public boolean init() {
 		String sql = "select cd_id,cd_name from cdg_regioncode order by cd_index ";
 		DBCommon mydb = new DBCommon();
@@ -64,7 +64,7 @@ public class RegioncodeOperation implements IAppConfig{
 		StringBuffer rt = new StringBuffer("<option></option>");
 		String name = "";
 		Set<String> set = map.keySet();
-		List<String> idlist = new ArrayList();
+		List<String> idlist = new ArrayList<>();
 		for(String id:set){
 			if(id.matches(regex)){
 				idlist.add(id);
@@ -123,7 +123,7 @@ public class RegioncodeOperation implements IAppConfig{
 		Set<String> set = map.keySet();
 		StringBuffer rt = new StringBuffer("<option></option>");
 		String name = "";
-		List<String> idlist = new ArrayList();
+		List<String> idlist = new ArrayList<>();
 		for(String mapkey:set){
 			if(mapkey.matches(regex)){
 				idlist.add(mapkey);
@@ -154,7 +154,7 @@ public class RegioncodeOperation implements IAppConfig{
 		int count = 0;
 		StringBuffer rt = new StringBuffer("<option></option>");
 		String name = "";
-		List<String> idlist = new ArrayList();
+		List<String> idlist = new ArrayList<>();
 		Set<String> set = map.keySet();
 		for(String id:set){
 			if(id.matches(regex)){

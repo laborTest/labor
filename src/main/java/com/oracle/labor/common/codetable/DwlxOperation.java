@@ -8,7 +8,7 @@ import com.oracle.labor.common.util.DBCommon;
 
 
 public class DwlxOperation implements IAppConfig{
-	private static HashMap<String,String> map = new HashMap();
+	private static HashMap<String,String> map = new HashMap<>();
 	public boolean init() {
 		String sql = "select dmid,dmmc from zj_d_dwlx order by xh ";
 		DBCommon mydb = new DBCommon();

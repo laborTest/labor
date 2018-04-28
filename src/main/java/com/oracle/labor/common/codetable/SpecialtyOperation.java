@@ -11,7 +11,7 @@ import com.oracle.labor.common.util.DBCommon;
 
 
 public class SpecialtyOperation implements IAppConfig{
-	private static HashMap<String,String> map = new HashMap();
+	private static HashMap<String,String> map = new HashMap<>();
 	public boolean init() {
 		String sql = "select cd_id,cd_name from cdl_specialty order by cd_index ";
 		DBCommon mydb = new DBCommon();
@@ -87,10 +87,6 @@ public class SpecialtyOperation implements IAppConfig{
 	
 	
 	public static String getGz(String string){
-		StringBuffer rt = new StringBuffer("<option></option>");
-		
-		
-		
 		String zhengze = string;
 		
 		//一级
@@ -143,7 +139,7 @@ public class SpecialtyOperation implements IAppConfig{
 		int count = 0;
 		StringBuffer rt = new StringBuffer("<option></option>");
 		String name = "";
-		List<String> idlist = new ArrayList();
+		List<String> idlist = new ArrayList<>();
 		Set<String> set = map.keySet();
 		for(String id:set){
 			if(id.matches(regex)){
@@ -199,7 +195,7 @@ public class SpecialtyOperation implements IAppConfig{
 		Set<String> set = map.keySet();
 		StringBuffer rt = new StringBuffer("<option></option>");
 		String name = "";
-		List<String> idlist = new ArrayList();
+		List<String> idlist = new ArrayList<>();
 		for(String mapkey:set){
 			if(mapkey.matches(regex)){
 				idlist.add(mapkey);

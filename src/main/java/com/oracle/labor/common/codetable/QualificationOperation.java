@@ -8,7 +8,7 @@ import com.oracle.labor.common.util.DBCommon;
 
 
 public class QualificationOperation implements IAppConfig{
-	private static HashMap<String,String> map = new HashMap();
+	private static HashMap<String,String> map = new HashMap<>();
 	public boolean init() {
 		String sql = "select cd_id,cd_name from cdl_qualification order by cd_index ";
 		DBCommon mydb = new DBCommon();

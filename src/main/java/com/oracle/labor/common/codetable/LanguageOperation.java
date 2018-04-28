@@ -6,9 +6,13 @@ import java.util.Set;
 import com.oracle.labor.common.config.IAppConfig;
 import com.oracle.labor.common.util.DBCommon;
 
-
+/**
+ * 语言表对应的内存表数据
+ * @author dingshuangen
+ *
+ */
 public class LanguageOperation implements IAppConfig{
-	private static HashMap<String,String> map = new HashMap();
+	private static HashMap<String,String> map = new HashMap<>();
 	public boolean init() {
 		String sql = "select cd_id,cd_name from cdg_language order by cd_index ";
 		DBCommon mydb = new DBCommon();
