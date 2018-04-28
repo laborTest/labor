@@ -1,10 +1,12 @@
 package com.oracle.labor.dao;
 
-import com.oracle.labor.po.LdlscUser;
-import com.oracle.labor.po.LdlscUserExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import com.oracle.labor.po.LdlscUser;
+import com.oracle.labor.po.LdlscUserExample;
 
 @Repository
 public interface LdlscUserMapper {

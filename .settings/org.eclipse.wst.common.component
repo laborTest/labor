@@ -17,7 +17,7 @@
                         
         
         <property name="java-output-path" value="/ssm0418/target/classes"/>
-        <property name="context-root" value="ssm0418"/>
+        <property name="context-root" value="labor"/>
                     
     
     </wb-module>
