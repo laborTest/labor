@@ -11,7 +11,6 @@ package com.oracle.labor.common.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -30,7 +29,6 @@ public class DBCommon {
     private static String url = null;
     private static String username = null;
     private static String password = null;
-    private PreparedStatement ps=null;
     static {
         driver = DbaConfig.getDRIVER();
         url = DbaConfig.getURL();
@@ -52,50 +50,6 @@ public class DBCommon {
         }         
     }
     
-    /**
-     * 根据条件进行查询
-     * @param sql
-     * @param args
-     * @return
-     */
-	public String[][] selectByParam(String sql, Object... args) {
-
-		if (args.length == 0) {
-			return this.select(sql);
-		} else {
-
-			String[][] data = null;
-			conn = this.getConnection();
-			try {
-
-				ps =conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-				for(int i=0;i<args.length;i++) {
-					ps.setObject(i+1, args[i]);
-				}
-				rs = ps.executeQuery(sql);
-				rs.last();
-				int x = rs.getRow();
-				int y = rs.getMetaData().getColumnCount();
-				data = new String[x][y];
-				rs.beforeFirst();
-				int i = 0;
-				while (rs.next()) {
-					for (int j = 0; j < y; j++) {
-						data[i][j] = rs.getString(j + 1);
-					}
-					i++;
-				}
-				return data;
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-				return null;
-			} finally {
-				this.rsClose();
-				this.stmtClose();
-				this.connClose();
-			}
-		}
-	}
     public String[][] select(String sql){
         String[][] data = null;
         conn = this.getConnection();

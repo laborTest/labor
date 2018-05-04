@@ -151,7 +151,7 @@ public class CommonHandler {
 	}
 	
 	/**
-	 * 组织类型
+	 * 组织类型,单位性质
 	 * @param code
 	 * @return
 	 */
@@ -211,19 +211,30 @@ public class CommonHandler {
 	}
 	
 	/**
-	 * 地区
+	 * 省级
 	 * @param code
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/service/region/{code}",produces="text/html;charset=UTF-8")
-	public String getRegion(@PathVariable("code")String code) {
-		String result=RegioncodeOperation.getOption(code);
+	@RequestMapping(value="/service/getProvince",produces="text/html;charset=UTF-8")
+	public String getProvince() {
+		String result=RegioncodeOperation.getProvince();
 		return result;
 	}
 	
 	/**
-	 * 企业注册类型（国有，私有。。。。）
+	 * 根据参数获得下级地区
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/service/getRegion/{code}/{name}",produces="text/html;charset=UTF-8")
+	public String getRegion(@PathVariable("code")String code,@PathVariable("name")String name) {
+		String result=RegioncodeOperation.getSelectedRegion(code, name);
+		return result;
+	}
+	
+	/**
+	 * 企业经济类型（国有，私有。。。。）
 	 * @param code
 	 * @return
 	 */
@@ -253,6 +264,18 @@ public class CommonHandler {
 	@RequestMapping(value="/service/specialty/{code}",produces="text/html;charset=UTF-8")
 	public String getSpecialty(@PathVariable("code")String code) {
 		String result=SpecialtyOperation.getOption(code);
+		return result;
+	}
+	
+	/**
+	 * 一级工种行业
+	 * @param code
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/service/work",produces="text/html;charset=UTF-8")
+	public String getWorkType() {
+		String result=SpecialtyOperation.getHy();
 		return result;
 	}
 	
