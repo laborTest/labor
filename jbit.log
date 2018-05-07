@@ -112,4 +112,13 @@
   2018-04-29 15:55:34 JakartaCommonsLoggingImpl.java DEBUG Found column "bip_fl_slcd", data type 12, in table "labor..bip_foreignlanguage"
   2018-04-29 15:55:34 JakartaCommonsLoggingImpl.java DEBUG Found column "bip_fl_jywy", data type 12, in table "labor..bip_foreignlanguage"
   2018-04-29 15:55:34 JakartaCommonsLoggingImpl.java DEBUG Found column "bip_fl_wysm", data type 12, in table "labor..bip_foreignlanguage"
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Logging initialized using 'org.mybatis.generator.logging.commons.JakartaCommonsLoggingLogFactory@4ec6a292' adapter.
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Retrieving column information for table "zj_grqzdjjdb"
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Found column "GRDJJDBH", data type 12, in table "labor..zj_grqzdjjdb"
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Found column "QZBH", data type 12, in table "labor..zj_grqzdjjdb"
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Found column "DOJYY", data type 12, in table "labor..zj_grqzdjjdb"
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Found column "DOJSJ", data type 12, in table "labor..zj_grqzdjjdb"
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Found column "JIDYY", data type 12, in table "labor..zj_grqzdjjdb"
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Found column "JIDSJ", data type 12, in table "labor..zj_grqzdjjdb"
+  2018-05-05 15:00:08 JakartaCommonsLoggingImpl.java DEBUG Found column "GDSJ", data type 12, in table "labor..zj_grqzdjjdb"
   

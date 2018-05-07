@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ include file="/common/import.jsp" %>
 <html>
 <head>
@@ -54,13 +55,13 @@
             </TR>
  
  <TR align="center" class="line3"> 
-              <TD width="10%"><bean:write name="info" property="bip_name"/>${userInfo.bip_name}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_citizenid"/>${userInfo.bip_citizenid}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_birthday"/>${userInfo.bip_birthday}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_long"/>${userInfo.bip_long}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_weight"/>${userInfo.bip_weight}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_eyesightleft"/>${userInfo.bip_eyesightleft}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_eyesightright"/>${userInfo.bip_eyesightright}</TD>
+              <TD width="10%">${bipInfo.name}</TD>
+              <TD width="10%">${bipInfo.citizenId}</TD>
+              <TD width="10%">${bipInfo.birthday}</TD>
+              <TD width="10%">${bipInfo.height}</TD>
+              <TD width="10%">${bipInfo.weight}</TD>
+              <TD width="10%">${bipInfo.leftEye}</TD>
+              <TD width="10%">${bipInfo.rightEye}</TD>
               </TR>
  </TBODY>
 </TABLE>
@@ -77,13 +78,13 @@
               
              </TR>
    			<TR align="center" class="line3"> 
-              <TD width="10%"><bean:write name="info" property="bip_res_address"/>${userInfo.bip_res_address}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_con_contacttel"/>${userInfo.bip_con_telephone}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_con_mobile"/>${userInfo.bip_con_mobile}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_con_email"/>${userInfo.bip_con_email}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_graduateschool"/>${userInfo.bip_graduateschool}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_subject"/>${userInfo.bip_subject}</TD>
-              <TD width="10%"><bean:write name="info" property="bip_educationallevel2"/>${userInfo.bip_educationallevel2}</TD>
+              <TD width="10%">${bipInfo.address}</TD>
+              <TD width="10%">${bipInfo.tel}</TD>
+              <TD width="10%">${bipInfo.mobile}</TD>
+              <TD width="10%">${bipInfo.email}</TD>
+              <TD width="10%">${bipInfo.school}</TD>
+              <TD width="10%">${bipInfo.major}</TD>
+              <TD width="10%">${bipInfo.secondEdu}</TD>
             
    			</TR>
  		</TBODY>
@@ -94,23 +95,21 @@
 
 <TABLE width="98%" border=1 cellPadding=0 cellSpacing=0 bordercolor="#FFFFFF" class="tablebody">
           <TBODY>
+          <tr align="center"><td bgcolor="#ffeeaa" colspan="4">操作记录：</td></tr>
              <TR  align="center" class="line4"> 
                <TD width="10%">冻结时间</TD>
                <TD width="10%">冻结原因</TD>
                 <TD width="10%">解冻时间</TD>
                <TD width="10%">解冻原因</TD>
                </TR>
-               
-<logic:present name="list1" scope="request">
-<logic:iterate name="list1" id="inf" scope="request">	               
+		<c:forEach items="${bipInfo.list }" var="list">           
                <TR  align="center" class="line4"> 
-               <TD width="10%"><bean:write name="inf" property="djtime"/>${userInfo.dsj}</TD>
-               <TD width="10%"><bean:write name="inf" property="djreason"/>${userInfo.dojyy}</TD>
-                 <TD width="10%"><bean:write name="inf" property="jdtime"/>${userInfo.jsj}</TD>
-               <TD width="10%"><bean:write name="inf" property="jdreason"/>${userInfo.jidyy}</TD>
+               <TD width="10%">${list.freezeTime}</TD>
+               <TD width="10%">${list.freezeReason}</TD>
+                 <TD width="10%">${list.thawTime}</TD>
+               <TD width="10%">${list.thawReason}</TD>
                </TR>
- </logic:iterate>
-</logic:present>               
+           </c:forEach>               
    		</TBODY>
 	</TABLE>	
 

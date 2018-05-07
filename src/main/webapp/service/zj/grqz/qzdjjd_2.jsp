@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ include file="/common/import.jsp" %>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
 <title>Untitled Document</title>
@@ -26,24 +26,28 @@
 	function toBack(){
 		window.location.href="<%=request.getContextPath()%>/service/zj/grqz/qzdjjd_1.jsp";
 	}
-	
-	function dosubmit(){
-					  
-		var cb = form1.cb;
-		
-				
-		form1.button1.disabled="true";
-		form1.button2.disabled="true";
-		form1.button3.disabled="true";
-	
-		form1.submit();	
-	
-	}
 </script>
-	
+<script src="<%=request.getContextPath()%>/js/jquery-1.11.1.js"></script>
+<script type="text/javascript">
+	//操作按钮
+	$(function(){
+		$("#btn_op").click(function(){
+			var type=$(":checkbox:checked").val();
+			var jobId=$(":checkbox:checked").prop("id");
+			if(type=="0"){
+				$("#from1").attr("action","freeze/"+jobId);
+			}else{
+				$("#from1").attr("action","thaw/"+jobId);
+			}
+			alert("操作成功，返回首页。")
+			$("#from1").submit();
+		});
+		
+	});
+</script>
 </head>
 <body>
-<form method="post" action="<%=request.getContextPath()%>/service/zj/grqz/grdj_dj.do?flag=DjJd" name="form1">
+<form id="from1" method="post" action="" name="form1">
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -85,17 +89,19 @@
               <TD width="13%">登记日期</TD>
               <TD width="6%">状态</TD>
             </TR>  
-            <TR align="center" class="line4"> 
-              <TD width="10%"><input type="checkbox" name="cb" value="1" onclick="either(this,form1.cb)"></TD>
-              <TD width="6%"><a href="javascript:void(null)" style="cursor:hand" onclick="window.open('<%=request.getContextPath()%>/','详细信息','left=100 top=100 width=820,height=469 scrollbars')" >${user.bip_name}</TD>
-              <TD width="6%">${user.sex}</TD>
-              <TD width="16%">${user.bip_birthday}</TD>
-              <TD width="20%">${user.bip_res_address}</TD>
-              <TD width="10%">${user.bip_con_mobile}</TD>
-              <TD width="13%">${user.djsj}</TD>
-         
-              <TD width="6%">${user.s}</TD>
-            </TR>
+            <c:forEach items="${info }" var="info">
+           		<TR align="center" class="line4"> 
+	              <TD width="10%"><input type="checkbox" name="cb" value="${info.status}" id="${info.jobId }" onclick="either(this,form1.cb)">${info.status==0?'冻结':'解冻'}</TD>
+	              <TD width="6%"><a href="getDetailInfo?bipId=${info.bip_id}" style="cursor:hand">${info.name}</a></TD>
+	              <TD width="6%">${info.sex}</TD>
+	              <TD width="16%">${info.birthday}</TD>
+	              <TD width="20%">${info.address}</TD>
+	              <TD width="10%">${info.mobile}</TD>
+	              <TD width="13%">${info.recordTime}</TD>
+	         
+	              <TD width="6%">${info.status==0?"正常":"冻结"}</TD>
+            	</TR>
+            </c:forEach>
           </TBODY>
       </TABLE>
  <div id="data" style="display:none" align="center">
@@ -119,7 +125,7 @@
 	<tr><td>&nbsp;</td></tr>
 	<tr  align="center" class="line2"> 
 		<td> 
-		<input name="button1" type="button" class="BUTTONs3"  value="确定" onclick="dosubmit()">&nbsp;&nbsp;
+		<input name="button1" type="button" id="btn_op" class="BUTTONs3"  value="确定">&nbsp;&nbsp;
 		<input name="button2" type="reset" class="BUTTONs3"  value="取消">&nbsp;&nbsp;
 		<input name="button3" type="button" class="BUTTONs3"  value="返 回" onclick="toBack()">
 		</td>
