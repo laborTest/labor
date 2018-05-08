@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.labor.dao.ZjGrqzdjjdbMapper">
+	<!-- 高级映射：一条求职登记对应多条解冻冻结记录 -->
+	<resultMap type="map" id="detailInfo">
+		<id column="bip_id" property="bip_id" />
+		<result column="jobNumber" property="jobNumber" />
+		<result column="name" property="name" />
+		<result column="age" property="age" />
+		<result column="birthday" property="birthday" />
+		<result column="idNumber" property="idNumber" />
+		<result column="weight" property="weight" />
+		<result column="height" property="height" />
+		<result column="leftEye" property="leftEye" />
+		<result column="rightEye" property="rightEye" />
+		<result column="address" property="address" />
+		<result column="mobile" property="mobile" />
+		<result column="tel" property="tel" />
+		<result column="email" property="email" />
+		<result column="school" property="school" />
+		<result column="major" property="major" />
+		<result column="secondEdu" property="secondEdu" />
+		<!-- 映射一个集合 ,多条冻结解冻记录 -->
+		<collection javaType="list" property="list" ofType="map">
+			<id column="freezeId" property="freezeId" />
+			<result column="freezeTime" property="freezeTime" />
+			<result column="freezeReason" property="freezeReason" />
+			<result column="thawTime" property="thawTime" />
+			<result column="beginDate" property="beginDate" />
+			<result column="thawReason" property="thawReason" />
+		</collection>
+	</resultMap>
+	<!-- 查询详细信息，冻结操作第三页面 -->
+	<sql id="freeze">
+		SELECT
+		b.bip_id,
+		g.GRDJJDBH freezeId,
+		r.qzbh jobNumber,
+		b.bip_name name,
+		b.bip_age age,
+		b.bip_birthday birthday,
+		b.bip_citizenid
+		citizenId,
+		bip_weight weight,
+		bip_long height,
+		bip_eyesightleft leftEye,
+		bip_eyesightright rightEye,
+		bip_res_address address,
+		bip_con_mobile
+		mobile,
+		bip_con_contacttel tel,
+		bip_con_email email,
+		bip_graduateschool
+		school,
+		bip_subject major,
+		bip_educationallevel2 secondEdu,
+		g.DOJSJ
+		freezeTime,
+		g.DOJYY freezeReason,
+		g.JIDSJ thawTime,
+		g.JIDYY thawReason
+		FROM
+		bip b
+		LEFT JOIN zj_grqzdjb r ON b.bip_id = r.bip_id
+		LEFT JOIN
+		zj_grqzdjjdb g ON g.QZBH = r.qzbh
+	</sql>
+	<select id="getFreezeInfo" resultMap="detailInfo">
+		<include refid="freeze"></include>
+		WHERE
+		b.bip_id=#{bipId}
+		AND
+		r.GDSJ IS NULL
+		ORDER BY g.JIDSJ DESC
+	</select>
+	<!-- 查询基本信息（个人冻结解冻第二页面数据） -->
+	<sql id="basicInfo">
+		SELECT
+		b.bip_id,
+		r.qzbh jobId,
+		bip_citizenid citizenId,
+		b.bip_name name,
+		b.bip_age age,
+		b.bip_sex sex,
+		b.bip_birthday birthday,
+		b.bip_citizenid idNumber,
+		bip_res_address address,
+		bip_con_mobile
+		mobile,
+		bip_con_contacttel tel,
+		r.DJSJ recordTime,
+		r.SFDJ `status`
+		FROM
+		bip b
+		LEFT JOIN zj_grqzdjb r ON b.bip_id = r.bip_id
+	</sql>
+	<select id="getBasicInfoByName" resultType="map">
+		<include refid="basicInfo"></include>
+		WHERE
+		bip_name like #{name}
+		AND
+		GDSJ is NULL
+	</select>
+
+	<select id="getBasicInfoByCitizenId" resultType="map">
+		<include refid="basicInfo"></include>
+		WHERE
+		bip_citizenid =#{citizenId}
+		AND
+		GDSJ is NULL
+	</select>
+	<!-- 解冻记录 -->
+	<update id="thaw">
+		update zj_grqzdjjdb set
+		JIDYY=#{record.jidyy},JIDSJ=#{record.jidsj},GDSJ=#{record.gdsj}
+		where
+		QZBH=#{record.qzbh} and GDSJ IS NULL
+	</update>
+
+
+	<resultMap id="BaseResultMap"
+		type="com.oracle.labor.po.ZjGrqzdjjdb">
+		<id column="GRDJJDBH" jdbcType="VARCHAR" property="grdjjdbh" />
+		<result column="QZBH" jdbcType="VARCHAR" property="qzbh" />
+		<result column="DOJYY" jdbcType="VARCHAR" property="dojyy" />
+		<result column="DOJSJ" jdbcType="VARCHAR" property="dojsj" />
+		<result column="JIDYY" jdbcType="VARCHAR" property="jidyy" />
+		<result column="JIDSJ" jdbcType="VARCHAR" property="jidsj" />
+		<result column="GDSJ" jdbcType="VARCHAR" property="gdsj" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value"
+										item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value"
+										item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		GRDJJDBH, QZBH, DOJYY, DOJSJ, JIDYY, JIDSJ, GDSJ
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.oracle.labor.po.ZjGrqzdjjdbExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from zj_grqzdjjdb
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from zj_grqzdjjdb
+		where GRDJJDBH = #{grdjjdbh,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		zj_grqzdjjdb
+		where GRDJJDBH = #{grdjjdbh,jdbcType=VARCHAR}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.oracle.labor.po.ZjGrqzdjjdbExample">
+		delete from zj_grqzdjjdb
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert"
+		parameterType="com.oracle.labor.po.ZjGrqzdjjdb">
+		insert into zj_grqzdjjdb (GRDJJDBH, QZBH, DOJYY,
+		DOJSJ,
+		JIDYY, JIDSJ,
+		GDSJ)
+		values (#{grdjjdbh,jdbcType=VARCHAR},
+		#{qzbh,jdbcType=VARCHAR},
+		#{dojyy,jdbcType=VARCHAR},
+		#{dojsj,jdbcType=VARCHAR}, #{jidyy,jdbcType=VARCHAR},
+		#{jidsj,jdbcType=VARCHAR},
+		#{gdsj,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.oracle.labor.po.ZjGrqzdjjdb">
+		insert into zj_grqzdjjdb
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="grdjjdbh != null">
+				GRDJJDBH,
+			</if>
+			<if test="qzbh != null">
+				QZBH,
+			</if>
+			<if test="dojyy != null">
+				DOJYY,
+			</if>
+			<if test="dojsj != null">
+				DOJSJ,
+			</if>
+			<if test="jidyy != null">
+				JIDYY,
+			</if>
+			<if test="jidsj != null">
+				JIDSJ,
+			</if>
+			<if test="gdsj != null">
+				GDSJ,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="grdjjdbh != null">
+				#{grdjjdbh,jdbcType=VARCHAR},
+			</if>
+			<if test="qzbh != null">
+				#{qzbh,jdbcType=VARCHAR},
+			</if>
+			<if test="dojyy != null">
+				#{dojyy,jdbcType=VARCHAR},
+			</if>
+			<if test="dojsj != null">
+				#{dojsj,jdbcType=VARCHAR},
+			</if>
+			<if test="jidyy != null">
+				#{jidyy,jdbcType=VARCHAR},
+			</if>
+			<if test="jidsj != null">
+				#{jidsj,jdbcType=VARCHAR},
+			</if>
+			<if test="gdsj != null">
+				#{gdsj,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.oracle.labor.po.ZjGrqzdjjdbExample"
+		resultType="java.lang.Long">
+		select count(*) from zj_grqzdjjdb
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update zj_grqzdjjdb
+		<set>
+			<if test="record.grdjjdbh != null">
+				GRDJJDBH = #{record.grdjjdbh,jdbcType=VARCHAR},
+			</if>
+			<if test="record.qzbh != null">
+				QZBH = #{record.qzbh,jdbcType=VARCHAR},
+			</if>
+			<if test="record.dojyy != null">
+				DOJYY = #{record.dojyy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.dojsj != null">
+				DOJSJ = #{record.dojsj,jdbcType=VARCHAR},
+			</if>
+			<if test="record.jidyy != null">
+				JIDYY = #{record.jidyy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.jidsj != null">
+				JIDSJ = #{record.jidsj,jdbcType=VARCHAR},
+			</if>
+			<if test="record.gdsj != null">
+				GDSJ = #{record.gdsj,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update zj_grqzdjjdb
+		set GRDJJDBH = #{record.grdjjdbh,jdbcType=VARCHAR},
+		QZBH = #{record.qzbh,jdbcType=VARCHAR},
+		DOJYY =
+		#{record.dojyy,jdbcType=VARCHAR},
+		DOJSJ =
+		#{record.dojsj,jdbcType=VARCHAR},
+		JIDYY =
+		#{record.jidyy,jdbcType=VARCHAR},
+		JIDSJ =
+		#{record.jidsj,jdbcType=VARCHAR},
+		GDSJ =
+		#{record.gdsj,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.oracle.labor.po.ZjGrqzdjjdb">
+		update zj_grqzdjjdb
+		<set>
+			<if test="qzbh != null">
+				QZBH = #{qzbh,jdbcType=VARCHAR},
+			</if>
+			<if test="dojyy != null">
+				DOJYY = #{dojyy,jdbcType=VARCHAR},
+			</if>
+			<if test="dojsj != null">
+				DOJSJ = #{dojsj,jdbcType=VARCHAR},
+			</if>
+			<if test="jidyy != null">
+				JIDYY = #{jidyy,jdbcType=VARCHAR},
+			</if>
+			<if test="jidsj != null">
+				JIDSJ = #{jidsj,jdbcType=VARCHAR},
+			</if>
+			<if test="gdsj != null">
+				GDSJ = #{gdsj,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where GRDJJDBH = #{grdjjdbh,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.oracle.labor.po.ZjGrqzdjjdb">
+		update zj_grqzdjjdb
+		set QZBH = #{qzbh,jdbcType=VARCHAR},
+		DOJYY = #{dojyy,jdbcType=VARCHAR},
+		DOJSJ = #{dojsj,jdbcType=VARCHAR},
+		JIDYY = #{jidyy,jdbcType=VARCHAR},
+		JIDSJ = #{jidsj,jdbcType=VARCHAR},
+		GDSJ = #{gdsj,jdbcType=VARCHAR}
+		where GRDJJDBH =
+		#{grdjjdbh,jdbcType=VARCHAR}
+	</update>
+</mapper>
