@@ -9,7 +9,7 @@
 <script>
  function delete1(){
      var flag = false;
-		var deldata = form1.pkdata;
+		var deldata = form1.jobId;
 		if(deldata!=undefined){
 			if(deldata.length!=undefined){
 				for(var i=0;i<deldata.length;i++){
@@ -32,7 +32,7 @@
 			return;
 		}
 		if(window.confirm("您确定要归档吗？")){
-			   form1.action="<%=request.getContextPath()%>/ldlsc_qzgd_gd";
+			   form1.action="archive";
 		       form1.button2.disabled = true;
 			   form1.button22.disabled = true; 
 			  
@@ -87,25 +87,31 @@
           <TD width="14%">联系电话</TD>
           <TD width="23%">登记日期</TD>
         </TR>
-        <c:forEach var="b" varStatus="a" items="${list}">
-     <TR class="line4" align="center" > 
-          <TD width="6%">${a.count}</TD>
-          <TD width="6%"><INPUT TYPE="checkbox" class="radio" name="pkdata" onclick="" value="${b.qzbh}">${b.qzbh}</TD>
-          <TD width="11%">${b.bip_name}</TD>
-           <TD width="6%">${b.bip_sex}</TD>
-          <TD width="6%">${b.bip_age}</TD>
-          <TD width="13%" >${b.bip_res_address}</TD>
-          <TD width="14%">${b.bip_con_contacttel}</TD>
-          <TD width="23%">${b.djsj}</TD>  
-        </TR> 
-       	</c:forEach>
-        <TR> 
+       	 <c:if test="${empty infoList}">
+       	 	<tr>
+       	 	<td bgcolor="#ffeeaa" align="center" colspan="8" rowspan="2"><h2>未查询到符合条件的信息。</h2></td>
+       		</tr>
+       	 </c:if>
+				<c:forEach var="info" varStatus="a" items="${infoList}">
+					<TR class="line4" align="center">
+						<TD width="6%">${a.count}</TD>
+						<TD width="6%"><INPUT TYPE="checkbox" class="radio"
+							name="jobId" onclick="" value="${info.jobId}">${info.jobId}</TD>
+						<TD width="11%">${info.bipName}</TD>
+						<TD width="6%">${info.bipSex}</TD>
+						<TD width="6%">${info.bipAge}</TD>
+						<TD width="13%">${info.bipAddress}</TD>
+						<TD width="14%">${info.bipTel==null?info.bipMoblie:info.bipTel}</TD>
+						<TD width="23%">${info.recordTime}</TD>
+					</TR>
+				</c:forEach>
+				<TR> 
           <TD height=25 colspan="9" align="center"><br>
 
         <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0">
           <tr align="center" class="line2" > 
             <td> 
-              <input name="button2" type="button" class=BUTTONs3  value="确 定" onclick="delete1()">&nbsp;&nbsp;
+               <input name="button2" type="button" class=BUTTONs3  value="归 档" onclick="delete1()">&nbsp;&nbsp;
               <input name="button22" type="reset" class=BUTTONs3  value="取 消" onclick="fanhui()">&nbsp;&nbsp;
             </td>
           </tr>

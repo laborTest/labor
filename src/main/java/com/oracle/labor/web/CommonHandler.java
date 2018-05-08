@@ -273,9 +273,14 @@ public class CommonHandler {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/service/work",produces="text/html;charset=UTF-8")
-	public String getWorkType() {
-		String result=SpecialtyOperation.getHy();
+	@RequestMapping(value="/service/work/{gzhy}",produces="text/html;charset=UTF-8")
+	public String getWorkType(@PathVariable String gzhy) {
+		String result=null;
+		if(gzhy=="0") {
+			result=SpecialtyOperation.getHy();
+		}else {
+			result=SpecialtyOperation.getOption(gzhy);
+		}
 		return result;
 	}
 	

@@ -14,93 +14,236 @@
 
 		//ajax请求查询求职者是否已经登记
 		$("#sfzhm").blur(function() {
-			$.get("../../getInfo/" + $(this).val());
-		});
-		//获取所有的下拉选项数据
-		//1.性别
-		$("#xb").load("../../sex/${info.bip.sex==null?0:info.bip.sex}");
+			var exp = /^\d{17}[\d|X]|^\d{15}$/;
+			var citizenId=$(this).val();
+			if(exp.test(citizenId)){
+				$.get("../../getBipAllInfo/" + citizenId,function(data){
+					
+					//判断是否存在数据，选择性加载文本框内容
+					//首先清空所有文本框
+						$("input:text:gt(0)").each(function(){
+							$(this).val("");
+						});
+					if(data){
+						$("#form1").attr("action","../../updateInfo");
+						//个人id
+						$("#bipId").val(data.bip_id);
+						//求职登记表id
+						$("#qzbh").val(data.qzbh);
+						//工种id
+						$("#qzgzbh").val(data.gz[0].QZGZBH);
+						//外语id
+						$("#bipFlId").val(data.language[0].bip_fl_id);
+						//技能id
+						$("#bipSId").val(data.skill[0].bip_s_id);
+						//年龄
+						$("#nl").val(data.bip_age);
+						//姓名
+						$("#xm").val(data.bip_name);
+						//视力：
+						$("#leftEye").val(data.bip_eyesightleft);
+						$("#rightEye").val(data.bip_eyesightright);
+						//身高：
+						$("#height").val(data.bip_long);
+						//体重:
+						$("#weight").val(data.bip_weight);
+						//专业
+						$("#major").val(data.bip_subject);
+						//毕业时间
+						$("#bysj").val(data.bip_bysj);
+						//毕业学校
+						$("#school").val(data.bip_graduateschool);
+						//固定电话
+						$("#tel").val(data.bip_con_telephone);
+						//手机号码
+						$("#mobile").val(data.bip_con_mobile);
+						//邮箱
+						$("#bipemail").val(data.bip_con_email);
+						//邮编
+						$("#postcode").val(data.bip_con_postcode);
+						//联系人
+						$("#contact").val(data.bip_con_contact);
+						//联系人电话
+						$("#contacttel").val(data.bip_con_contacttel);
+						//居住地
+						$("#address").val(data.bip_res_address);
+						//第二学历
+						$("#secondEdu").val(data.bip_educationallevel2);
+						//工作简历
+						$("#resume").val(data.bip_resume);
+						//其他说明
+						$("#qtsm").val(data.bip_qtsm);
+						
+						//处理所有的checkbox
+						//低保人员
+						$("#db").attr("checked",data.bip_t_lowersecurity=="1");
+						//两劳人员
+						$("#ll").attr("checked",data.bip_t_criminal=="1");
+						//特困人员
+						$("#tk").attr("checked",data.bip_t_destitute=="1");
+						//农转非
+						$("#nf").attr("checked",data.bip_t_peasant=="1");
+						//复员退伍
+						$("#fy").attr("checked",data.bip_t_veteran=="1");
+						//外埠转入
+						$("#wb").attr("checked",data.bip_t_othercities=="1");
+						//再就业优惠证
+						$("#yh").attr("checked",data.bip_t_czjyyhz=="1");
+						//人户分离
+						$("#rh").attr("checked",data.bip_t_rhfl=="1");
+						//应届毕业生
+						$("#yj").attr("checked",data.bip_t_newgraduate=="1");
+						//接收短信
+						$("#jsdx").attr("checked",data.SFJSDX=="1");
+						//参加培训
+						$("#cjpx").attr("checked",data.SFCJPX=="1");
+						//是否接受就业指导
+						$("#jszd").attr("checked",data.SFJSZYZD=="1");
+					}else{
+						$("#form1").attr("action","../../saveInfo");
+					}
+					
+					//获取所有的下拉选项数据
+					var sex=data.bip_sex;
+					//1.性别
+					$("#xb").load("../../sex/"+(sex?sex:0));
 
-		//2.民族
-		$("#mz").load("../../nation/${info.bip.nation==null?0:info.bip.nation}");
+					var mz=data.bip_minzu;
+					//2.民族
+					$("#mz").load("../../nation/"+(mz?mz:0));
 
-		//3.政治面貌
-		$("#zzmm").load("../../politicsAspect/${info.bip.politicalStatus==null?0:info.bip.politicalStatus}");
+					var zzmm=data.bip_zzmm;
+					//3.政治面貌
+					$("#zzmm").load("../../politicsAspect/"+(zzmm?zzmm:0));
 
-		//4.婚姻状况
-		$("#hyzk").load("../../marriage/${info.bip.maritalStatus==null?0:info.bip.maritalStatus}");
+					var hyzk=data.bip_hyzk;
+					//4.婚姻状况
+					$("#hyzk").load("../../marriage/"+(hyzk?hyzk:0));
 
-		//5.户籍性质
-		$("#hjxz").load("../../rprType/0");
+					var hjxz=data.bip_hjxz;
+					//5.户籍性质
+					$("#hjxz").load("../../rprType/"+(hjxz?hjxz:0));
 
-		//6.人员类别
-		$("#rylb").load("../../personnelType/0");
+					var rylb=data.bip_rylb;
+					//6.人员类别
+					$("#rylb").load("../../personnelType/"+(rylb?rylb:0));
 
-		//7.健康状况
-		$("#jkzk").load("../../healthState/0");
+					var jkzk=data.bip_jkzk;
+					//7.健康状况
+					$("#jkzk").load("../../healthState/"+(jkzk?jkzk:0));
 
-		$("#jkzk").change(function() {
-			var val = $(this).val();
-			if (val == "5") {
-				//8.残疾情况
-				$("#cjzk").load("../../deformity/0");
-			} else {
-				$("#cjzk").html("");
+					//8.判断是否加载残疾情况
+					var cjqk=data.bip_cjqk;
+					if(cjqk){
+						$("#cjzk").load("../../deformity/"+cjqk);
+					}
+					$("#jkzk").change(function() {
+						var val = $(this).val();
+						if (val == "5") {
+							$("#cjzk").html("");
+							//8.残疾情况
+							$("#cjzk").load("../../deformity/0");
+						} else {
+							$("#cjzk").html("");
+						}
+					});
+
+					//9.户口所在地
+					var hkszd=data.bip_hkszd;
+					if(hkszd){
+						$("#dwszs").load("../../getRegion/" + hkszd + "/province");
+						$("#dwszq").load("../../getRegion/" + hkszd + "/city");
+						$("#dwszj").load("../../getRegion/" + hkszd + "/village");
+					}else{
+						$("#dwszs").load("../../getProvince");
+					}
+					//下拉列表联动
+					$("#dwszs").change(function() {
+						var code = $(this).val();
+						//加载二级地区（市，区，县）
+						$("#dwszq").load("../../getRegion/" + code + "/city");
+						//清空三级地区数据
+						$("#dwszj").html("");
+					});
+					$("#dwszq").change(function() {
+						var code = $(this).val();
+						//加载三级地区（镇，乡，街）
+						$("#dwszj").load("../../getRegion/" + code + "/village");
+					});
+
+					var whcd=data.bip_whcd;
+					//10.文化程度
+					$("#whcd1").load("../../education/"+(whcd?whcd:0));
+
+					var zyjn=data.skill[0].bip_s_zyjn;
+					//11.职业技能
+					$("#init_zyjn").load("../../specialty/"+(zyjn?zyjn:0));
+					//从事年限
+					$("#init_csnx").val(data.skill[0].bip_s_years);
+					var jsdj=data.skill[0].bip_s_jsdj;
+					//12.技术等级
+					$("#init_jsdj").load("../../qualification/"+(jsdj?jsdj:0));
+
+					var wylx=data.language[0].bip_fl_jywy;
+					//13.外语类型
+					$("#init_jywy").load("../../language/"+(wylx?wylx:0));
+					var wycd=data.language[0].bip_fl_slcd;
+					//14.外语熟练程度
+					$("#init_wyslcd").load("../../proficiency/"+(wycd?wycd:0));
+					//外语说明
+					$("#init_wysm").val(data.language[0].bip_fl_wysm);
+					
+					var jsjdj=data.bip_pc_dj;
+					//15.计算机等级
+					$("#jsjdj").load("../../computer/"+(jsjdj?jsjdj:0));
+					
+					var jsjslcd=data.bip_pc_slcd;
+					//16.计算机熟练程度
+					$("#jsjslcd").load("../../proficiency/"+(jsjslcd?jsjslcd:0));
+
+					var dwxz=data.dwxx;
+					//17.单位性质
+					$("#dwxz").load("../../orgType/"+(dwxz?dwxz:0));
+
+					var dwhy=data.dwhy;
+					//18.单位行业
+					$("#dwhy").load("../../industry/"+(dwhy?dwhy:0));
+
+					var jjlx=data.dwjjlx;
+					//19.经济类型
+					$("#dwjjlx").load("../../regType/"+(jjlx?jjlx:0));
+
+					var gzdq=data.gzdq;
+					//20.工作地区
+					$("#gzdq").load("../../getRegion/"+(gzdq?gzdq:00)+"/province");
+					
+					var gz=data.gz[0];
+					//21.工种
+					$("#qzgz1").load("../../work/"+(gz.GZ?gz.GZ:0));
+
+					//22.用工形式
+					$("#ygxs1").load("../../employType/"+(gz.YGXS?gz.YGXS:0));
+					//最低工资
+					$("#zdyx1").val(gz.ZDYX);
+					//最高工资
+					$("#zgyx1").val(gz.ZGYX);
+					
+				});	
+			}else{
+				$(this).next().html("身份证格式错误".fontcolor("red"));
+				$(this).val("");
 			}
 		});
-
-		//9.户口所在地（一级。直辖市，自治区）
-		$("#dwszs").load("../../getProvince");
-
-		//下拉列表联动
-		$("#dwszs").change(function() {
-			var code = $(this).val();
-			//加载二级地区（市，区，县）
-			$("#dwszq").load("../../getRegion/" + code + "/city");
-			//清空三级地区数据
-			$("#dwszj").html("");
+		
+		$("#sfzhm").focus(function(){
+			$(this).next().html("");
 		});
-		$("#dwszq").change(function() {
-			var code = $(this).val();
-			//加载三级地区（镇，乡，街）
-			$("#dwszj").load("../../getRegion/" + code + "/village");
-		});
-
-		//10.文化程度
-		$("#whcd1").load("../../education/0");
-
-		//11.职业技能
-		$("#init_zyjn").load("../../specialty/0");
-
-		//12.技术等级
-		$("#init_jsdj").load("../../qualification/0");
-
-		//13.外语类型
-		$("#init_jywy").load("../../language/0");
-		//14.外语熟练程度
-		$("#init_wyslcd").load("../../proficiency/0");
-
-		//15.计算机等级
-		$("#jsjdj").load("../../computer/0");
-		//16.计算机熟练程度
-		$("#jsjslcd").load("../../proficiency/0");
-
-		//17.单位性质
-		$("#dwxz").load("../../orgType/0");
-
-		//18.单位行业
-		$("#dwhy").load("../../industry/0");
-
-		//19.经济类型
-		$("#dwjjlx").load("../../regType/0");
-
-		//20.工作地区
-		$("#gzdq").load("../../getRegion/00/province");
-
-		//21.工种
-		$("#qzgz1").load("../../work");
-
-		//22.用工形式
-		$("#ygxs1").load("../../employType/0");
+		
+		/* //添加按钮
+		$("#gztj").click(function(){
+			var t=$(this).parents(".qzgztable");
+			
+		}); */
 		//清空职业技能列表 
 		$("#zyjnqc").click(function() {
 			if ($("#panel_1").html() == "") {
@@ -199,7 +342,7 @@
 </script>
 </head>
 <body>
-	<form name="form1" action="../../saveInfo" method="post">
+	<form id="form1" name="form1" action="" method="post">
 		<table width="98%" border="0" align="center" cellpadding="0"
 			cellspacing="0">
 			<tr>
@@ -278,19 +421,21 @@
 						<tr class="line1">
 							<td width="13%" align="right"><span class="redtxt">*</span>身份证号码</td>
 							<td width="20%"><INPUT id="sfzhm" name="bipCitizenid"
-								style="WIDTH: 100%" value="${info.bip.idNumber }" /></td>
+								style="WIDTH: 100%" value="" /><span></span>
+								<input type="text" hidden="true" id="bipId" name="bipId" value=""/>
+								</td>
 							<td width="13%" align="right"><span class="redtxt">*</span>性
 								别</td>
 							<td width="20%"><select name="bipSex" id="xb" size="1"
 								style="WIDTH: 100%"></select></td>
 							<td width="13%" align="right">年 龄</td>
 							<td width="20%"><INPUT id="nl" name="bipAge"
-								style="WIDTH: 100%" value="${info.bip.age }"></td>
+								style="WIDTH: 100%" value=""></td>
 						</tr>
 						<tr class="line2">
 							<td align="right"><span class="redtxt">*</span>姓 名</td>
 							<td><INPUT id="xm" name="bipName" maxlength="32"
-								style="WIDTH: 100%" value="${info.bip.name}"></td>
+								style="WIDTH: 100%" value=""></td>
 							<td align="right"><span class="redtxt">*</span>民 族</td>
 							<td><select id="mz" name="bipMinzu" size="1"
 								style="WIDTH: 100%"></select></td>
@@ -331,16 +476,16 @@
 						</tr>
 						<tr class="line1">
 							<td align="right">视 力</td>
-							<td>左<INPUT name="bipEyesightleft" maxlength="3"
+							<td>左<INPUT id="leftEye" name="bipEyesightleft" maxlength="3"
 								style="WIDTH: 34%" value=""> 右 <INPUT
-								name="bipEyesightright" maxlength="3" style="WIDTH: 34%"
+								name="bipEyesightright" id="rightEye" maxlength="3" style="WIDTH: 34%"
 								value="">
 							</td>
 							<td align="right">身 高</td>
-							<td><INPUT name="bipLong" maxlength="3" style="WIDTH: 65%"
+							<td><INPUT name="bipLong" id="height" maxlength="3" style="WIDTH: 65%"
 								value="${info.bip.height }">(厘米)</td>
 							<td align="right">体 重</td>
-							<td><INPUT name="bipWeight" maxlength="3" style="WIDTH: 65%"
+							<td><INPUT name="bipWeight" id="weight" maxlength="3" style="WIDTH: 65%"
 								value="${info.bip.weight }">(公斤)</td>
 						</tr>
 
@@ -359,61 +504,61 @@
 							<td align="right"><span class="redtxt">*</span>文化程度</td>
 							<td><select id="whcd1" name="bipWhcd" style="width: 100%"></select></td>
 							<td align="right">所学专业</td>
-							<td><input name="bipSubject" maxlength="32"
+							<td><input name="bipSubject" id="major" maxlength="32"
 								style="WIDTH: 100%" value=""></td>
 							<td align="right">毕业时间</td>
-							<td><input name="bipBysj" maxlength="32" style="WIDTH: 100%"
+							<td><input name="bipBysj" id="bysj"maxlength="32" style="WIDTH: 100%"
 								value="" maxlength="8"></td>
 						</tr>
 						<tr class="line1">
 							<td align="right">毕业学校</td>
-							<td colspan="5"><input name="bipGraduateschool"
+							<td colspan="5"><input name="bipGraduateschool" id="school"
 								maxlength="32" style="WIDTH: 100%" value=""></td>
 
 						</tr>
 
 						<tr class="line2">
 							<td align="right"><span class="redtxt">*</span>固定电话</td>
-							<td><INPUT name="bipConTelephone" style="WIDTH: 100%"
+							<td><INPUT name="bipConTelephone" id="tel"style="WIDTH: 100%"
 								value="" maxlength="32"></td>
 							<td width="12%" align="right"><span class="redtxt">*</span>手
 								机</td>
-							<td width="21%"><INPUT name="bipConMobile" maxlength="11"
+							<td width="21%"><INPUT name="bipConMobile" id="mobile"maxlength="11"
 								style="WIDTH: 100%" value=""></td>
 							<td align="right">E-mail</td>
-							<td width="21%"><INPUT name="bipConEmail" maxlength="48"
+							<td width="21%"><INPUT name="bipConEmail" id="bipemail" maxlength="48"
 								style="WIDTH: 100%" value=""></td>
 						</tr>
 						<tr class="line1">
 							<td align="right">邮政编码</td>
-							<td><INPUT name="bipConPostcode" maxlength="6"
+							<td><INPUT name="bipConPostcode" id="postcode" maxlength="6"
 								style="WIDTH: 100%" value=""></td>
 							<td align="right">联系人</td>
-							<td><INPUT name="bipConContact" maxlength="32"
+							<td><INPUT name="bipConContact" id="contact"maxlength="32"
 								style="WIDTH: 100%" value=""></td>
 							<td align="right">联系人电话</td>
-							<td><INPUT name="bipConContacttel" maxlength="32"
+							<td><INPUT name="bipConContacttel" id="contacttel"maxlength="32"
 								style="WIDTH: 100%" value=""></td>
 						</tr>
 						<tr class="line2">
 							<td width="13%" align="right">居住地址</td>
-							<td colspan="5"><INPUT name="bipResAddress" maxlength="32"
+							<td colspan="5"><INPUT name="bipResAddress" id="address" maxlength="32"
 								style="WIDTH: 100%" value=""></td>
 						</tr>
 						<tr class="line1">
 							<td align="right">第二学历</td>
 							<td colspan="5"><textarea name="bipEducationallevel2"
-									style="width: 100%"></textarea></td>
+									id="secondEdu"style="width: 100%"></textarea></td>
 						</tr>
 						<tr class="line2">
 							<td width="13%" align="right">工作简历</td>
 							<td class="line1" colspan="5"><textarea name="bipResume"
-									style="width: 100%"></textarea></td>
+								id="resume"	style="width: 100%"></textarea></td>
 						</tr>
 						<tr class="line1">
 							<td width="13%" align="right">其他说明</td>
 							<td colspan="5"><textarea id="qtsm" name="bipQtsm"
-									style="width: 100%"></textarea></td>
+								id="qtsm"	style="width: 100%"></textarea></td>
 						</tr>
 					</table>
 				</td>
@@ -443,35 +588,35 @@
 			class="tablebody" style="display: block" id="c4">
 			<tr class="line2">
 				<td width="12%" align="right"><input name="bipTLowersecurity"
-					type="checkbox" class="radio" value="1"></td>
+					id="db"type="checkbox" class="radio" value="1"></td>
 				<td colspan="18%">低保人员</td>
 				<td width="12%" align="right"><input name="bipTDestitute"
-					type="checkbox" class="radio" value="1"></td>
+					id="tk"type="checkbox" class="radio" value="1"></td>
 				<td width="18%">特困人员</td>
 				<td width="12%" align="right"><input type="checkbox"
-					name="bipTNewgraduate" class="radio" value="1"></td>
+					id="yj"name="bipTNewgraduate" class="radio" value="1"></td>
 				<td width="26%">应届高校毕业生</td>
 			</tr>
 			<tr class="line1">
 				<td width="12%" align="right"><input name="bipTVeteran"
-					type="checkbox" class="radio" value="1"></td>
+					id="fy"type="checkbox" class="radio" value="1"></td>
 				<td colspan="18%">复员退伍</td>
 				<td width="12%" align="right"><input type="checkbox"
-					name="bipTOthercities" class="radio" value="1"></td>
+					id="wb"name="bipTOthercities" class="radio" value="1"></td>
 				<td width="18%">外埠转入</td>
 				<td width="12%" align="right"><input type="checkbox"
-					name="bipTRhfl" class="radio" value="1"></td>
+					id="rh"name="bipTRhfl" class="radio" value="1"></td>
 				<td width="26%">是否人户分离</td>
 			</tr>
 			<tr class="line2">
 				<td width="12%" align="right"><input name="bipTPeasant"
-					type="checkbox" class="radio" value="1"></td>
+					id="nf"type="checkbox" class="radio" value="1"></td>
 				<td colspan="18%">农转非</td>
 				<td width="12%" align="right"><input type="checkbox"
-					name="bipTCriminal" class="radio" value="1"></td>
+					id="ll"name="bipTCriminal" class="radio" value="1"></td>
 				<td width="18%">两劳释放</td>
 				<td width="12%" align="right"><input type="checkbox"
-					class="radio" name="bipTCzjyyhz" value="1"></td>
+					id="yh"class="radio" name="bipTCzjyyhz" value="1"></td>
 				<td width="26%">是否持再就业优惠证</td>
 			</tr>
 		</table>
@@ -501,7 +646,10 @@
 					<table id="zyjnTable" width="100%" border="0" cellpadding="0"
 						cellspacing="1">
 						<tr class="line1">
-							<td width="13%" align="right">职业技能</td>
+							<td width="13%" align="right">职业技能
+								<!-- 职业技能id -->
+								<input type="text" hidden="true" id="bipSId" name="skills[0].bipSId" value=""/>
+							</td>
 							<td id="o2" width="19%"><select id="init_zyjn"
 								name="skills[0].bipSZyjn" size="1" style="WIDTH: 100%"></select></td>
 							<td width="11%" align="right">技术等级</td>
@@ -523,7 +671,10 @@
 							style="word-break: break-all; width: fixed">
 
 							<tr class="line2" align="center">
-								<td width="13%" align="right">具有外语</td>
+								<td width="13%" align="right">具有外语
+								<!-- 外语id -->
+								<input type="text" hidden="true" id="bipFlId" name="list[0].bipFlId" value=""/>
+								</td>
 								<td width="19%"><select class="init_jywy" id="init_jywy"
 									name="list[0].bipFlJywy" size="1" style="WIDTH: 100%"></select></td>
 								<td width="11%" align="right">熟练程度</td>
@@ -582,7 +733,9 @@
 					<TABLE width="100%" border=0 cellPadding=0 cellSpacing=1
 						class="tablebody">
 						<tr class="line1">
-							<td width="13%" align="right">单位性质</td>
+							<td width="13%" align="right">
+							<input type="text" hidden="true" id="qzbh" name="qzbh" value=""/>
+							单位性质</td>
 							<td width="22%"><select id="dwxz" name="dwxx" size="1"
 								style="WIDTH: 100%"></select></td>
 							<td width="10%" align="right">单位行业</td>
@@ -606,13 +759,13 @@
 						<tr class="line2">
 							<td width="14%" align="right">是否接收短信</td>
 							<td width="17%"><input name="sfjsdx" type="checkbox"
-								value="1" class="radio"></td>
+								id="jsdx"value="1" class="radio"></td>
 							<td width="14%" align="right">是否参加培训</td>
 							<td width="14%"><input name="sfcjpx" type="checkbox"
-								value="1" class="radio"></td>
+								id="cjpx"value="1" class="radio"></td>
 							<td width="18%" align="right">是否接受职业指导</td>
 							<td width="23%"><input name="sfjszyzd" type="checkbox"
-								value="1" class="radio"></td>
+								id="jszd"value="1" class="radio"></td>
 						</tr>
 					</table>
 				</td>
@@ -640,10 +793,13 @@
 			align="center" class="tablebody" style="display: block">
 			<tr align="center">
 				<td>
-					<table id="qzgzTable" width="100%" border=0 cellPadding=0
+					<table id="qzgzTable" class="qzgztable" width="100%" border=0 cellPadding=0
 						cellSpacing=1 class="tablebody" style="display: block">
 						<tr class="line1" align="center">
-							<td width="40"><span class="redtxt">*</span>工种</td>
+							<td width="40"><span class="redtxt">*</span>工种
+							<!-- 求职工种编号 -->
+							<input type="text" hidden="true" id="qzgzbh" name="gzList[0].qzgzbh" value=""/>
+							</td>
 							<td id="o1" width="110"><select class="qzgz1" id="qzgz1"
 								name="gzList[0].gz" size="1" style="WIDTH: 100%"></select></td>
 							<td width="50">用工形式</td>
@@ -656,7 +812,7 @@
 										<tr>
 											<td><input id="zdyx1" name="gzList[0].zdyx" type="text"
 												style="width: 40px" maxlength="6"> 至 <input
-												id="zgyx2" name="gzList[0].zgyx" type="text"
+												id="zgyx1" name="gzList[0].zgyx" type="text"
 												style="width: 40px" maxlength="6"> 元</td>
 										</tr>
 									</table>

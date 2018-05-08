@@ -5,13 +5,14 @@
 <title>手动归档</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="<%=request.getContextPath()%>/styles/css/common.css" rel="stylesheet" type="text/css">
-<script>
+<script src="<%=request.getContextPath()%>/js/jquery-1.11.1.js"></script>
+<script type="text/javascript">
     function chaxun(){
-         var sfzhm=form1.sfzhm.value;
-         var xm=form1.xm.value;
-         var cxkssj=form1.cxkssj.value;
-         var cxjssj=form1.cxjssj.value;
-         var sfdj=form1.sfdj.value;
+         var sfzhm=form1.citizenId.value;
+         var xm=form1.bipName.value;
+         var cxkssj=form1.startTime.value;
+         var cxjssj=form1.endTime.value;
+         var sfdj=form1.status.value;
          var flag = false ;
          if(cxkssj+cxjssj != ""){
          	if(cxkssj != "" && cxjssj == ""){
@@ -45,7 +46,7 @@
          }
         form1.qd.disabled=true;
         form1.qx.disabled=true;
-        form1.action="<%=request.getContextPath()%>/ldlsc_qzgd_Servlet";
+        form1.action="../../select";
         form1.submit();
     }
     function fanhui(){
@@ -90,7 +91,7 @@
       <TD align="center" class="line2"> <table width="250" border="0" cellspacing="0" cellpadding="0">
           <tr> 
             <td width="103">身份证号码</td>
-            <td width="194"><input name="sfzhm" type="text" maxlength="18"  style='width:100%' ></td>
+            <td width="194"><input name="citizenId" type="text" maxlength="18"  style='width:100%' ></td>
           </tr>
         </table></TD>
     </TR>
@@ -98,7 +99,7 @@
       <TD align="center" class="line1"> <table width="250" border="0" cellspacing="0" cellpadding="0">
           <tr> 
             <td width="103">姓　　　名</td>
-            <td width="194"> <input name="xm" type="text" maxlength="32"  style='width:100%' ></td>
+            <td width="194"> <input name="bipName" type="text" maxlength="32"  style='width:100%' ></td>
           </tr>
         </table></TD>
     </TR>
@@ -106,7 +107,7 @@
       <TD align="center" class="line2"> <table width="250" border="0" cellspacing="0" cellpadding="0">
           <tr> 
             <td width="103">登记时间起</td>
-            <td width="194" > <textarea name="cxkssj"  style='width:100%' class='mask'  htcurl="url(<%=request.getContextPath() %>/common/htc/format.htc)"  rows="1" cols="10" mask='date' maxlength='10' ></textarea></td>
+            <td width="194" > <textarea name="startTime"  style='width:100%' class='mask'  htcurl="url(<%=request.getContextPath() %>/common/htc/format.htc)"  rows="1" cols="10" mask='date' maxlength='10' ></textarea></td>
           </tr>
         </table></TD>
     </TR>
@@ -114,7 +115,7 @@
       <TD align="center" class="line1"> <table width="250" border="0" cellspacing="0" cellpadding="0">
           <tr> 
             <td width="103">登记时间止</td>
-            <td width="194"> <textarea name="cxjssj"  style='width:100%' class='mask'  htcurl="url(<%=request.getContextPath() %>/common/htc/format.htc)"  rows="1" cols="10" mask='date' maxlength='10' ></textarea></td>
+            <td width="194"> <textarea name="endTime"  style='width:100%' class='mask'  htcurl="url(<%=request.getContextPath() %>/common/htc/format.htc)"  rows="1" cols="10" mask='date' maxlength='10' ></textarea></td>
           </tr>
         </table></TD>
     </TR>
@@ -123,10 +124,10 @@
       <TD height=25 class="line1"><table width="250" border="0" cellspacing="0" cellpadding="0">
           <tr> 
             <td width="103">是否冻结</td>
-            <td width="194"><select name="sfdj"  style='width:100%' >
+            <td width="194"><select name="status"  style='width:100%' >
 				<option value="">请选择</option>
                 <option value="1">冻结</option>
-				<option value="2">正常</option>
+				<option value="0">正常</option>
               </select> </td>
           </tr>
         </table></TD>
