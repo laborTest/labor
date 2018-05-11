@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div align="center" >
-		<h1>操作成功，点击返回 [ <a href="/labor/">首 页</a> ]</h1>
+		<h1>操作成功，点击返回 [ <a href="/labor/" target="_top">首 页</a> ]</h1>
 	</div>
 </body>
 </html>

@@ -39,7 +39,7 @@ public class ApplyJobHandler {
 	@RequestMapping("/saveInfo")
 	public String saveBipInfo(Bip bip,SkillListModel skill,LanguageListModel language,GzListModel gz,ZjGrqzdjb record) {
 		service.insertInfo(bip, language.getList(), skill.getSkills(), gz.getGzList(), record);
-		return "/service/zj/grqz/success";
+		return "/success";
 	}
 	
 	/**
@@ -57,6 +57,6 @@ public class ApplyJobHandler {
 	@RequestMapping("/updateInfo")
 	public String updateBipInfo(Bip bip,SkillListModel skill,LanguageListModel language,GzListModel gz,ZjGrqzdjb record) {
 		service.updateInfo(bip, skill, language, gz, record);
-		return "/service/zj/grqz/success";
+		return "/success";
 	}
 }
