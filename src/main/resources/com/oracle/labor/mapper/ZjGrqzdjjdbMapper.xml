@@ -70,7 +70,7 @@
 		WHERE
 		b.bip_id=#{bipId}
 		AND
-		r.GDSJ IS NULL
+		(r.GDSJ IS NULL OR r.GDSJ='')
 		ORDER BY g.JIDSJ DESC
 	</select>
 	<!-- 查询基本信息（个人冻结解冻第二页面数据） -->
@@ -99,7 +99,7 @@
 		WHERE
 		bip_name like #{name}
 		AND
-		GDSJ is NULL
+		(GDSJ is NULL or GDSJ='')
 	</select>
 
 	<select id="getBasicInfoByCitizenId" resultType="map">
@@ -107,14 +107,14 @@
 		WHERE
 		bip_citizenid =#{citizenId}
 		AND
-		GDSJ is NULL
+		(GDSJ is NULL or GDSJ='')
 	</select>
 	<!-- 解冻记录 -->
 	<update id="thaw">
 		update zj_grqzdjjdb set
 		JIDYY=#{record.jidyy},JIDSJ=#{record.jidsj},GDSJ=#{record.gdsj}
 		where
-		QZBH=#{record.qzbh} and GDSJ IS NULL
+		QZBH=#{record.qzbh} and (GDSJ is NULL or GDSJ='')
 	</update>
 
 

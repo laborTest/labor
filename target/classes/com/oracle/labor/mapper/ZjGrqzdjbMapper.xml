@@ -22,7 +22,7 @@
 		<if test="bipName!=null and bipName!=''">and bip_name like #{bipName}</if>
 		<if test="startTime!=null and startTime!=''">and ( d.DJSJ BETWEEN #{startTime} AND #{endTime} )</if>
 		<if test="status!='' and status!=null ">and d.SFDJ=#{status}</if>
-		and GDSJ IS NULL OR GDSJ=''
+		and (GDSJ IS NULL OR GDSJ='')
 		ORDER BY d.DJSJ DESC
 	</where>
 </select>

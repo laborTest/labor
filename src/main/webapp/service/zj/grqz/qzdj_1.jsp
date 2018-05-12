@@ -239,50 +239,20 @@
 			$(this).next().html("");
 		});
 		
-		/* //添加按钮
-		$("#gztj").click(function(){
-			var t=$(this).parents(".qzgztable");
+		//添加按钮
+		$("input[name='btn_add_gz']").click(function(){
+			var t=$(this).parents(".gzDiv");
+			$("#gzParent").prepend(t);
 			
-		}); */
-		//清空职业技能列表 
-		$("#zyjnqc").click(function() {
-			if ($("#panel_1").html() == "") {
-				alert("未找到清除对象 ");
-				return;
-			} else {
-				if (confirm("确认清空列表吗 ")) {
-					$("#panel_1").empty();
-				}
-				return;
-			}
+		}); 
+		
+		//添加按钮
+		$("input[name='btn_add_qc']").click(function(){
+			var t=$(this).parents(".gzDiv");
+			$("#gzParent").remove(t);
+			
+		}); 
 
-		});
-
-		//外语-清空按钮 
-		$("#wyqc").click(function() {
-			if ($("#panel_2").html() == "") {
-				alert("未找到清除对象 ");
-				return;
-			} else {
-				if (confirm("确认清空列表吗 ")) {
-					$("#panel_2").empty();
-				}
-				return;
-			}
-		});
-		//清空列表 
-		$("#gzqc").click(function() {
-			if ($("#panel_3").html() == "") {
-				alert("未找到清除对象 ");
-				return;
-			} else {
-				if (confirm("确认清空列表吗 ")) {
-					$("#panel_3").empty();
-				}
-				return;
-			}
-
-		})
 		$("#baocun").click(function() {
 			var sfzhmReg = /^([0-9]{17})([0-9]|X)$/;
 			if ($("#sfzhm").val() == "") {
@@ -426,7 +396,7 @@
 								</td>
 							<td width="13%" align="right"><span class="redtxt">*</span>性
 								别</td>
-							<td width="20%"><select name="bipSex" id="xb" size="1"
+							<td width="20%"><select name="bipSex" id="xb" size="1" disabled="true"
 								style="WIDTH: 100%"></select></td>
 							<td width="13%" align="right">年 龄</td>
 							<td width="20%"><INPUT id="nl" name="bipAge"
@@ -789,7 +759,9 @@
 				<td valign="bottom">择业工种</td>
 			</tr>
 		</table>
-		<table width="98%" id="c7" border=0 cellPadding=0 cellSpacing=1
+	<div id="gzParent">
+		<div class="gzDiv">
+					<table width="98%" id="c7" border=0 cellPadding=0 cellSpacing=1
 			align="center" class="tablebody" style="display: block">
 			<tr align="center">
 				<td>
@@ -800,44 +772,36 @@
 							<!-- 求职工种编号 -->
 							<input type="text" hidden="true" id="qzgzbh" name="gzList[0].qzgzbh" value=""/>
 							</td>
-							<td id="o1" width="110"><select class="qzgz1" id="qzgz1"
+							<td id="o1" width="110"><select class="gzName" id="qzgz1"
 								name="gzList[0].gz" size="1" style="WIDTH: 100%"></select></td>
 							<td width="50">用工形式</td>
-							<td width="80"><select class="ygxs1" id="ygxs1"
+							<td width="80"><select class="ygxsName" id="ygxs1"
 								name="gzList[0].ygxs" size="1" style="WIDTH: 100%"></select></td>
 							<td width="50" align="right">月薪</td>
 							<td width="140">
 								<div id="yx" style="display:">
 									<table>
 										<tr>
-											<td><input id="zdyx1" name="gzList[0].zdyx" type="text"
+											<td><input id="zdyx1" name="gzList[0].zdyx" class="zdyxName" type="text"
 												style="width: 40px" maxlength="6"> 至 <input
 												id="zgyx1" name="gzList[0].zgyx" type="text"
-												style="width: 40px" maxlength="6"> 元</td>
+												style="width: 40px" maxlength="6" class="zgyxName"> 元</td>
 										</tr>
 									</table>
 								</div>
 							</td>
 							<!--  -->
-							<td width="40"><input type="button" id="gztj" name="gztj"
+							<td width="40"><input type="button" id="gztj" name="btn_add_gz"
 								value="添加" class="BUTTON2"></td>
-							<td width="40"><input type="button" id="gzqc" name="gzsc"
+							<td width="40"><input type="button" id="gzqc" name="btn_add_qc"
 								value="清空" class="BUTTON2"></td>
 						</tr>
 					</table>
-
 				</td>
 			</tr>
 		</table>
-		<table width="98%" id="c8" border=0 cellPadding=0 cellSpacing=1
-			align="center" class="tablebody" style="display: block">
-			<tr align="center">
-				<td>
-					<div id="panel_3"></div>
-
-				</td>
-			</tr>
-		</table>
+		</div>
+	</div>
 		<TABLE width="98%" border=0 cellPadding="0" cellSpacing=1
 			align="center" class="tablebody">
 			<tr align="center">
