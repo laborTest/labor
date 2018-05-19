@@ -273,15 +273,31 @@ public class CommonHandler {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="/service/work/{gzhy}",produces="text/html;charset=UTF-8")
-	public String getWorkType(@PathVariable String gzhy) {
-		String result=null;
-		if(gzhy=="0") {
-			result=SpecialtyOperation.getHy();
-		}else {
-			result=SpecialtyOperation.getOption(gzhy);
-		}
-		return result;
+	@RequestMapping(value="/service/gz",produces="text/html;charset=UTF-8")
+	public String getFirst() {
+		return SpecialtyOperation.getHy();
+	}
+	
+	/**
+	 * 根据参数获得下属工种
+	 * @param code
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/service/gz/{selectId}/{name}",produces="text/html;charset=UTF-8")
+	public String getSecond(@PathVariable("selectId") String selectId,@PathVariable("name") String name) {
+		return SpecialtyOperation.getSelectedGz(selectId,name);
+	}
+	
+	/**
+	 * 获取指定的唯一选项
+	 * @param code
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/service/gzName/{code}",produces="text/html;charset=UTF-8")
+	public String getWorkType(@PathVariable("code") String code) {
+		return SpecialtyOperation.getSingleOption(code);
 	}
 	
 	/**
