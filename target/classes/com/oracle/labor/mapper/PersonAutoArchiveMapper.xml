@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.labor.dao.PersonAutoArchiveMapper">
+	
+	<select id="getAll" resultType="map">
+		SELECT qzbh,djsj,djyxq from zj_grqzdjb
+		where (GDSJ='' or GDSJ is NULL)
+	</select>
+	<update id="autoArchiveDJB">
+		UPDATE zj_grqzdjb SET GDSJ=#{endTime},djyxq='0'
+		where qzbh in 
+		<foreach collection="qzbh" item="q" open="(" close=")" separator=",">#{q}</foreach>
+		 and (GDSJ='' or GDSJ is NULL)
+	</update>
+	<!-- 每次有效期-1 -->
+	<update id="updateTime">
+		UPDATE zj_grqzdjb
+		SET djyxq=djyxq-1
+		where djyxq<![CDATA[>=]]>0 and (GDSJ='' or GDSJ is NULL)
+	</update>
+	<!-- 归档工种表 -->
+	<update id="autoArchiveGZB">
+		UPDATE zj_grqzgzb
+		SET  GDSJ=#{endTime}
+		where qzbh in 
+		<foreach collection="qzbh" item="q" open="(" close=")" separator=",">#{q}</foreach>
+		 and (GDSJ='' or GDSJ is NULL)
+	</update>
+	<!-- 归档冻结解冻表 -->
+	<update id="autoArchiveDJJDB">
+		UPDATE zj_grqzdjjdb
+		SET  GDSJ=#{endTime}
+		where qzbh in 
+		<foreach collection="qzbh" item="q" open="(" close=")" separator=",">#{q}</foreach>
+		 and (GDSJ='' or GDSJ is NULL)
+	</update>
+</mapper>

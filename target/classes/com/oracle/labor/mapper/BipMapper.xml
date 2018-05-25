@@ -155,7 +155,7 @@
 	LEFT JOIN zj_grqzdjb d ON d.bip_id = s.bip_id
 	LEFT JOIN zj_grqzgzb z ON z.QZBH = d.qzbh
 	WHERE
-		d.GDSJ IS NULL OR d.GDSJ=''
+		(d.GDSJ IS NULL OR d.GDSJ='')
 	AND
 		b.bip_citizenid=#{citizenId}
   </select>

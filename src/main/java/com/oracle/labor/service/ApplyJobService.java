@@ -82,6 +82,8 @@ public class ApplyJobService {
 			list.get(i).setQzgzbh(GenerateID.getGenerateId());
 			//设置外键
 			list.get(i).setQzbh(qzbh);
+			list.get(i).setXh(i+"");
+			list.get(i).setDjsj(Tools.getDate("yyyy-MM-dd"));
 		}
 		//保存
 		bipService.insertBip(bip);//个人基本信息

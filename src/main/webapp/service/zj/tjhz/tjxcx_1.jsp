@@ -4,21 +4,9 @@
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.11.1.js"></script>
     <script type="text/javascript" >
     	$(function(){
+    		
+    		$("#hjxz").load("../../rprType/0");
     	
-    		$.get("<%=request.getContextPath()%>/service/zj/tjhz/tjcx.do",{},function(data){
-    			$.getJSON("<%=request.getContextPath()%>/service/zj/tjhz/tjcx.do",{},function(d){
-    		
-    				$("#xb").html(d.sex);
-    				$("#hjxz").html(d.huji);
-    				$("#rylb").html(d.per);
-    				$("#gzgz").html(d.sp);
-    				$("#dwlx").html(d.dwlx);
-    				$("#hwlb").html(d.gwlb);
-    				$("#zdxl1").html(d.ed1);
-    				$("#zgxl2").html(d.ed2);
-    			}); 
-    		
-    		});   		
     	});    
     </script>
     
