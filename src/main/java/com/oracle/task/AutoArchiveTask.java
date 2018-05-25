@@ -27,7 +27,7 @@ public class AutoArchiveTask{
     "0 10,44 14 ? 3 WED"    三月的每周三的14：10和14：44触发 
     "0 15 10 ? * MON-FRI"   每个周一、周二、周三、周四、周五的10：15触发
      */
-	@Scheduled(cron = "0/5 * * * * ? ")
+	@Scheduled(cron = "0 0 5 * * ?")//每天早上5点触发自动归档
 	public void run() {
 		System.out.println("***************开启定时任务**********************");
 		int effectedNum=service.AutoArchive();
