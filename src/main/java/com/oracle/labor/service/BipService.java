@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.oracle.labor.dao.BipMapper;
 import com.oracle.labor.po.Bip;
+import com.oracle.labor.po.BipExample;
 
 /**
  * 个人信息表对应service
@@ -26,6 +27,11 @@ public class BipService {
 	 */
 	@Transactional
 	public void insertBip(Bip bip) {
+		//删除身份证相同的信息
+		BipExample e=new BipExample();
+		e.createCriteria().andBipCitizenidEqualTo(bip.getBipCitizenid());
+		bipDao.deleteByExample(e);
+		//保存新的信息
 		bipDao.insertSelective(bip);
 	}
 	

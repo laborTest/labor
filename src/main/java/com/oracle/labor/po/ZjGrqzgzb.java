@@ -1,7 +1,13 @@
 package com.oracle.labor.po;
 
 public class ZjGrqzgzb {
-    private String qzgzbh;
+    @Override
+	public String toString() {
+		return "ZjGrqzgzb [qzgzbh=" + qzgzbh + ", qzbh=" + qzbh + ", xh=" + xh + ", gz=" + gz + ", ygxs=" + ygxs
+				+ ", zdyx=" + zdyx + ", zgyx=" + zgyx + ", djsj=" + djsj + ", gdsj=" + gdsj + "]";
+	}
+
+	private String qzgzbh;
 
     private String qzbh;
 

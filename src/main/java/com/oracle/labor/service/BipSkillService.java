@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oracle.labor.common.util.GenerateID;
 import com.oracle.labor.dao.BipSkillMapper;
 import com.oracle.labor.po.BipSkill;
 /**
@@ -46,9 +47,15 @@ public class BipSkillService {
 	 * @return
 	 */
 	@Transactional
-	public void updateSkill(List<BipSkill> skill) {
-		for(int i=0;i<skill.size();i++) {
-			skillDao.updateByPrimaryKeySelective(skill.get(i));
+	public void updateSkill(List<BipSkill> skill,String bipId) {
+		
+		//删除已存在数据
+		skillDao.deleteAllByBipId(bipId);
+		//添加
+		for (BipSkill s : skill) {
+			s.setBipId(bipId);
+			s.setBipSId(GenerateID.getGenerateId());
+			skillDao.insertSelective(s);
 		}
 	}
 }

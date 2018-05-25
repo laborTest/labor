@@ -101,9 +101,9 @@ public class ApplyJobService {
 	public void updateInfo(Bip bip,SkillListModel skill,LanguageListModel language,GzListModel gz,ZjGrqzdjb record) {
 		
 		bipService.updateBip(bip);//更新个人信息
-		skillService.updateSkill(skill.getSkills());//更新技能信息
-		langService.updateLanguage(language.getList());//更新外语信息
-		gzService.update(gz.getGzList());//更新工种信息
+		skillService.updateSkill(skill.getSkills(),bip.getBipId());//更新技能信息
+		langService.updateLanguage(language.getList(),bip.getBipId());//更新外语信息
+		gzService.update(gz.getGzList(),record.getQzbh());//更新工种信息
 		recordService.updateRecord(record);//更新登记表信息
 	}
 	

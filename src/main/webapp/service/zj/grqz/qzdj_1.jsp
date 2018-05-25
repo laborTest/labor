@@ -11,31 +11,145 @@
 <script src="<%=request.getContextPath()%>/js/jquery-1.11.1.js"></script>
 <script>
 	$(function() {
+		
+		//处理重复名字的数据提交格式类型
+		var manageMore=function(select,prefix,subfix){
+			var n=$(select).length;
+			if(n>0){
+				$(select).each(function(){
+					$(this).attr("name",prefix+"["+n+"]."+subfix);
+					n--;
+				});
+			}
+		}
 
+		//同步加载请求
+		var myLoad=function(selector,url,data){
+			 $.ajax({ 
+				type:'get', 
+				url:url,
+				data:data,
+				async:false,//false代表只有在等待ajax执行完毕后才执行
+				success:function (msg){ 
+				   $(selector).html("");
+				    $(selector).html(msg);
+				} 
+			}); 
+		}
+		//添加职业技能
+		var addZyjn=function (){
+			var zyjn_text=$("#init_zyjn option:selected").text();
+			var zyjn_value=$("#init_zyjn").val();
+			var jsdj_text=$("#init_jsdj option:selected").text();
+			var jsdj_value=$("#init_jsdj").val();
+			
+			var csnx_value=$("#init_csnx").val();
+			
+			var init_zyjn=$("<td width='13%' align='right'>职业技能 </td ><td width='19%'><input type='hidden' name='bip_s_zyjn' value='"+zyjn_value+"'><input type='text' name='init_zyjn' size='1' value='"+zyjn_text+"' readonly='readonly' style='WIDTH: 100%'></td >");			
+			var init_jsdj=$("<td width='11%' align='right'>技术等级 </td ><td width='18%'><input type='hidden' name='bip_s_jsdj' value='"+jsdj_value+"'><input type='text' name='init_jsdj' value='"+jsdj_text+"' size='1' readonly='readonly' style='WIDTH: 100%'></td >");
+			var init_csnx=$("<td width='11%' align='right'>从事年限 </td ><td width='15%'><INPUT type='text' name='bip_s_years' value='"+csnx_value+"' readonly='readonly' style='WIDTH: 100%'></td >");
+			var csnx=$("<td width='7%' align='center'><INPUT type='hidden' value='"+csnx_value+" style='WIDTH: 100%'></td >");
+			var jnsc=$("<td width='8%' align='center'><input name='jnsc' type='button'  value='删除' class='BUTTON2' onClick='delRows(jywyTable)'></td >");
+			var tr=$("<tr class='line2' align='center' ></tr >");
+			var tab=$("<table id='jywyTable' width='100%'  align='center' border='0' cellpadding='0' cellspacing='1'  style='word-break:break-all;width:fixed'></table>");
+			var div=$("<div></div>");
+			tr.append(init_zyjn);
+			tr.append(init_jsdj);
+			tr.append(init_csnx);
+			tr.append(csnx);
+			tr.append(jnsc);			
+			tab.append(tr);
+			div.append(tab);			
+			$("#panel_1").prepend(div);
+			//一行div中的删除 
+			jnsc.click(function(){
+				$(this).parent().parent().parent().remove();
+			});
+		}
+		
+		//添加外语
+		var addLanguage=function(){
+			var ijwy_text=$("#init_jywy option:selected").text();
+			var ijwy_value=$("#init_jywy").val();
+			
+			var init_wyslcd_text=$("#init_wyslcd option:selected").text();
+			var init_wyslcd_value=$("#init_wyslcd").val();
+			
+			var init_wysm_value=$("#init_wysm").val();
+			
+			var init_jywy=$("<td width='13%' align='right'>具有外语 </td ><td width='19%'><input type='hidden' name='bip_fl_jywy' value='"+ijwy_value+"'><input type='text' name='init_jywy' size='1' value='"+ijwy_text+"' readonly='readonly' style='WIDTH: 100%'></td >");			
+			var init_wyslcd=$("<td width='11%' align='right'>熟练程度 </td ><td width='18%'><input type='hidden' name='bip_fl_years' value='"+init_wyslcd_value+"'><input type='text' name='init_wyslcd' value='"+init_wyslcd_text+"' size='1' readonly='readonly' style='WIDTH: 100%'></td >");
+			var init_wysm=$("<td width='11%' align='right'>外语说明 </td ><td width='15%'><INPUT type='text' name='init_wysm' value='"+init_wysm_value+"' readonly='readonly' style='WIDTH: 100%'></td >");
+			var wytj=$("<td align='center'><INPUT type='hidden' value='"+init_wysm_value+" style='WIDTH: 100%'></td >");
+			var wysc=$("<td width='8%' align='center'><input name='wysc' type='button'  value='删除' class='BUTTON2' onClick='delRows(jywyTable)'></td >");
+			var tr=$("<tr class='line2' align='center' ></tr >");
+			var tab=$("<table id='jywyTable' width='100%'  align='center' border='0' cellpadding='0' cellspacing='1'  style='word-break:break-all;width:fixed'></table>");
+			var div=$("<div></div>");
+			tr.append(init_jywy);
+			tr.append(init_wyslcd);
+			tr.append(init_wysm);
+			tr.append(wytj);
+			tr.append(wysc);			
+			tab.append(tr);
+			div.append(tab);			
+			$("#panel_2").prepend(div);
+			//一行div中的删除 
+			wysc.click(function(){
+				$(this).parent().parent().parent().remove();
+			})
+		}
+		
+		//添加工种
+		var addGz=function(){
+			var qzgz1_text=$("#qzgz1 option:selected").text();
+			var qzgz1_value=$("#qzgz1").val();
+			var ygxs1_text=$("#ygxs1 option:selected").text();
+			var ygxs1_value=$("#ygxs1").val();
+			var zdyx1_value=$("#zdyx1").val();
+			var zgyx2_value=$("#zgyx2").val();
+			var qzgz1=$("<td width='40' align='right'>工种 </td ><td width='110'><input type='hidden' name='GZ' value='"+qzgz1_value+"'><input type='text' size='1' value='"+qzgz1_text+"' readonly='readonly' style='WIDTH: 100%'></td >");			
+			var ygxs1=$("<td width='50' align='right'>用工形式 </td ><td width='80'><input type='hidden' name='YGXS' value='"+ygxs1_value+"'><input type='text' value='"+ygxs1_text+"' size='1' readonly='readonly' style='WIDTH: 100%'></td >");
+			var zdyx=$("<td width='40' align='right'>月薪  </td ><td width='140'><INPUT type='text' name='ZDYX' value='"+zdyx1_value+"' readonly='readonly' style='WIDTH: 40px'>&nbsp;至&nbsp;<INPUT type='text' name='ZGYX' value='"+zgyx2_value+"' readonly='readonly' style='WIDTH: 40px'></td >");
+			var gztj=$("<td width='40' align='right'><INPUT type='hidden'style='WIDTH: 100%'></td >");
+			var gzsc=$("<td width='40' align='right'><input name='gzsc' type='button'  value='删除' class='BUTTON2'></td >");
+			var tr=$("<tr class='line2' align='center' ></tr >");
+			var tab=$("<table width='100%'  align='center' border='0' cellpadding='0' cellspacing='1'  style='word-break:break-all;width:fixed'></table>");
+			var div=$("<div></div>");
+			tr.append(qzgz1);
+			tr.append(ygxs1);
+			tr.append(zdyx);
+			tr.append(gztj);
+			tr.append(gzsc);			
+			tab.append(tr);
+			div.append(tab);			
+			$("#panel_3").prepend(div);
+			//一行div中的删除 
+			gzsc.click(function(){
+				$(this).parent().parent().parent().remove();
+			})
+		}
+		
 		//ajax请求查询求职者是否已经登记
 		$("#sfzhm").blur(function() {
 			var exp = /^\d{17}[\d|X]|^\d{15}$/;
 			var citizenId=$(this).val();
 			if(exp.test(citizenId)){
 				$.get("../../getBipAllInfo/" + citizenId,function(data){
-					
 					//判断是否存在数据，选择性加载文本框内容
 					//首先清空所有文本框
-						$("input:text:gt(0)").each(function(){
+					$("input:text:gt(2)").each(function(){
 							$(this).val("");
 						});
+					
+					$("#panel_1").empty();
+					$("#panel_2").empty();
+					$("#panel_3").empty();
 					if(data){
 						$("#form1").attr("action","../../updateInfo");
 						//个人id
 						$("#bipId").val(data.bip_id);
 						//求职登记表id
 						$("#qzbh").val(data.qzbh);
-						//工种id
-						$("#qzgzbh").val(data.gz[0].QZGZBH);
-						//外语id
-						$("#bipFlId").val(data.language[0].bip_fl_id);
-						//技能id
-						$("#bipSId").val(data.skill[0].bip_s_id);
 						//年龄
 						$("#nl").val(data.bip_age);
 						//姓名
@@ -106,7 +220,9 @@
 					//获取所有的下拉选项数据
 					var sex=data.bip_sex;
 					//1.性别
-					$("#xb").load("../../sex/"+(sex?sex:0));
+					var sexId=citizenId.substring(citizenId.length-2,citizenId.length-1)%2;
+					sexId=(sexId==0?2:1);
+					$("#xb").load("../../sex/"+(sex?sex:sexId));
 
 					var mz=data.bip_minzu;
 					//2.民族
@@ -174,28 +290,10 @@
 					var whcd=data.bip_whcd;
 					//10.文化程度
 					$("#whcd1").load("../../education/"+(whcd?whcd:0));
-
-					var zyjn=data.skill[0].bip_s_zyjn;
-					//11.职业技能
-					$("#init_zyjn").load("../../specialty/"+(zyjn?zyjn:0));
-					//从事年限
-					$("#init_csnx").val(data.skill[0].bip_s_years);
-					var jsdj=data.skill[0].bip_s_jsdj;
-					//12.技术等级
-					$("#init_jsdj").load("../../qualification/"+(jsdj?jsdj:0));
-
-					var wylx=data.language[0].bip_fl_jywy;
-					//13.外语类型
-					$("#init_jywy").load("../../language/"+(wylx?wylx:0));
-					var wycd=data.language[0].bip_fl_slcd;
-					//14.外语熟练程度
-					$("#init_wyslcd").load("../../proficiency/"+(wycd?wycd:0));
-					//外语说明
-					$("#init_wysm").val(data.language[0].bip_fl_wysm);
 					
-					var jsjdj=data.bip_pc_dj;
+					var pcDj=data.bip_pc_dj;
 					//15.计算机等级
-					$("#jsjdj").load("../../computer/"+(jsjdj?jsjdj:0));
+					$("#jsjdj").load("../../computer/"+(pcDj?pcDj:0));
 					
 					var jsjslcd=data.bip_pc_slcd;
 					//16.计算机熟练程度
@@ -215,19 +313,57 @@
 
 					var gzdq=data.gzdq;
 					//20.工作地区
-					$("#gzdq").load("../../getRegion/"+(gzdq?gzdq:00)+"/province");
+					$("#gzdq").load("../../getRegion/"+(gzdq?gzdq:'00')+"/province");
 					
-					var gz=data.gz[0];
-					//21.工种
-					$("#qzgz1").load("../../work/"+(gz.GZ?gz.GZ:0));
-
-					//22.用工形式
-					$("#ygxs1").load("../../employType/"+(gz.YGXS?gz.YGXS:0));
-					//最低工资
-					$("#zdyx1").val(gz.ZDYX);
-					//最高工资
-					$("#zgyx1").val(gz.ZGYX);
-					
+					//职业技能与具有外语，工种的特殊处理
+					//回显技能
+					var skill=data.skill;
+					if(skill){
+						for(var i=skill.length-1;i>=0;i--){
+							myLoad("#init_zyjn","../../gzName/"+skill[i].bip_s_zyjn);
+							myLoad("#init_jsdj","../../qualification/"+skill[i].bip_s_jsdj);
+							$("#init_csnx").val(skill[i].bip_s_years);
+							if(i>0){
+								addZyjn();
+							}
+						}
+					}else{
+						//$("#init_zyjn").load("../../specialty/0");
+						//此功能改为多级选中操作
+						$("#init_jsdj").load("../../qualification/0");
+					}
+					//回显外语
+					var lang=data.language;
+					if(lang){
+						for(var i=lang.length-1;i>=0;i--){
+							myLoad("#init_jywy","../../language/"+lang[i].bip_fl_jywy);
+							myLoad("#init_wyslcd","../../proficiency/"+lang[i].bip_fl_slcd);
+							$("#init_wysm").val(lang[i].bip_fl_wysm);
+							if(i>0){
+								addLanguage();
+							}
+						}
+					}else{
+						$("#init_jywy").load("../../language/0");
+						$("#init_wyslcd").load("../../proficiency/0");
+					}
+					//回显工种
+					var gzArr=data.gz;
+					if(gzArr){
+						for(var i=gzArr.length-1;i>=0;i--){
+							myLoad("#qzgz1","../../gzName/"+gzArr[i].GZ);
+							myLoad("#ygxs1","../../employType/"+gzArr[i].YGXS);
+							$("#zdyx1").val(gzArr[i].ZDYX);
+							$("#zgyx2").val(gzArr[i].ZGYX);
+							if(i>0){
+								addGz();
+							}
+						}
+					}else{
+						//$("#qzgz1").load("../../work/0");
+						//此功能改为多级选中操作
+						$("#ygxs1").load("../../employType/0");
+					}
 				});	
 			}else{
 				$(this).next().html("身份证格式错误".fontcolor("red"));
@@ -238,21 +374,156 @@
 		$("#sfzhm").focus(function(){
 			$(this).next().html("");
 		});
-		
-		//添加按钮
-		$("input[name='btn_add_gz']").click(function(){
-			var t=$(this).parents(".gzDiv");
-			$("#gzParent").prepend(t);
+		//添加职业技能 
+		$("#zyjntj").click(function(){
+			if($("#init_zyjn").val()=="" ||$("#init_jsdj").val()==""||$("#init_csnx").val()==""){
+				alert("该添加项必须填写完毕后，才能继续添加");
+				return;
+			}else{
+				var reg=/^[0-9]{1,2}$/;
+				
+				//$!reg.test($("#init_csnx").val())
+				if(!reg.test($("#init_csnx").val())){
+					alert("从事年限有误 ");
+					return;
+				}else{
+					
+					//添加数据
+					addZyjn();
+					//清空选项 
+					$("#init_zyjn").empty();					
+					$("#init_jsdj").load("../../qualification/0");
+					$("#init_csnx").val("");
+				}
+			}	
+		})
+		//清空职业技能列表 
+		$("#zyjnqc").click(function(){
+			if($("#panel_1").html()==""){
+				alert("未找到清除对象 ");
+				return;
+			}else{
+				if(confirm("确认清空列表吗 ")){
+					$("#panel_1").empty();	
+				}
+				return;
+			}
 			
-		}); 
+		})
 		
-		//添加按钮
-		$("input[name='btn_add_qc']").click(function(){
-			var t=$(this).parents(".gzDiv");
-			$("#gzParent").remove(t);
+		
+		//外语 
+		$.get("qzdj_1.do",{code:"init_jywy"},function(data){$("#init_jywy").html(data);})
+		$("#init_jywy").change(function(){			
+			$.get("qzdj_1.do",{code:"init_wyslcd"},function(data){$("#init_wyslcd").html(data);})
+			$("#init_wysm").val("");
+		})
+		
+		$("#wytj").click(function(){			
+			//alert($(this).parent().parent().next());
+			if($("#init_jywy").val()=="" || $("#init_wyslcd").val()=="" || $("#init_wysm").val()==""){
+				alert("该添加项必须填写完毕后，才能继续添加");
+				return;
+			}			
+			addLanguage();
+			$("#init_jywy").load("../../language/0");
+			$("#init_wyslcd").load("../../proficiency/0");
+			$("#init_jywy").change();
+			$("#init_wysm").val("");
 			
-		}); 
+		})
+		//外语-清空按钮 
+		$("#wyqc").click(function(){
+			if($("#panel_2").html()==""){
+				alert("未找到清除对象 ");
+				return;
+			}else{
+				if(confirm("确认清空列表吗 ")){
+					$("#panel_2").empty();	
+				}
+				return;
+			}
+			
+		})
+		//工种添加
+		$("#gztj").click(function(){
 
+			if($("#qzgz1").val()=="" ||$("#ygxs1").val()==""||$("#zdyx1").val()==""||$("#zdyx2").val()==""){
+				alert("该添加项必须填写完毕后，才能继续添加");
+				return;
+			}else{
+				var reg=/^[0-9]*$/;
+				var zdyx1_value=parseInt($("#zdyx1").val());
+				var zgyx2_value=parseInt($("#zgyx2").val());				
+				if((!reg.test(zdyx1_value))||(!reg.test(zgyx2_value))||(zdyx1_value>zgyx2_value)){
+					alert("最低"+zdyx1_value+"  最高"+zgyx2_value)
+					alert("薪水格式错误，请检查 ");
+					return;
+				}else{
+					addGz();
+					//清空选项 
+					$("#qzgz1").empty();					
+					$("#ygxs1").load("../../employType/0");	
+					$("#zdyx1").val("");
+					$("#zgyx2").val("");
+				}
+			}
+			//清空列表 
+			$("#gzqc").click(function(){
+				if($("#panel_3").html()==""){
+					alert("未找到清除对象 ");
+					return;
+				}else{
+					if(confirm("确认清空列表吗 ")){
+						$("#panel_3").empty();	
+					}
+					return;
+				}
+			
+			})	
+		})
+		
+		//选择工种点击事件
+		$(".gzAddClass").click(function(){
+			var parent=$(this);
+			$("#chooseGz").css("display","block");
+			if($("#gzHy").is(":empty")){
+				$("#gzHy").load("../../gz");
+			}else{
+				$("#gzHy").change();
+			}
+			$("#gz1").html("");
+			$("#gz2").html("");
+			$("#gz3").html("");
+			$("#gzDm").val("");
+			$("#gzName").val("");
+			$("#gzHy").change(function(){
+				$("#gz1").load("../../gz/"+$(this).val()+"/gz1");
+				$("#gz2").html("");
+				$("#gz3").html("");
+			});
+			$("#gz1").change(function(){
+				$("#gz2").load("../../gz/"+$(this).val()+"/gz2");
+				$("#gz3").html("");
+			});
+			$("#gz2").change(function(){
+				$("#gz3").load("../../gz/"+$(this).val()+"/gz3");
+				$("#gzDm").val($(this).val());
+				$("#gzName").val($("#gz2 option:selected").html());
+			});
+			$("#gz3").change(function(){
+				$("#gzDm").val($(this).val());
+				$("#gzName").val($("#gz3 option:selected").html());
+			});
+			
+			//确定按钮点击事件
+			$("#btn_gz").click(function(){
+				var code = $("#gzDm").val();
+				parent.load("../../gzName/"+code);
+				$("#chooseGz").css("display","none");
+				
+			});
+		});
 		$("#baocun").click(function() {
 			var sfzhmReg = /^([0-9]{17})([0-9]|X)$/;
 			if ($("#sfzhm").val() == "") {
@@ -306,12 +577,38 @@
 				$("#lxdh").focus();
 				return;
 			}
+			
+			//处理多个工种
+			manageMore(":input[name='GZ']","gzList","gz");
+			manageMore(":input[name='YGXS']","gzList","ygxs");
+			manageMore(":input[name='ZDYX']","gzList","zdyx");
+			manageMore(":input[name='ZGYX']","gzList","zgyx");
+			//处理外语
+			manageMore(":input[name='bip_fl_jywy']","list","bipFlJywy");
+			manageMore(":input[name='bip_fl_years']","list","bipFlSlcd");
+			manageMore(":input[name='init_wysm']","list","bipFlWysm");
+			//处理技能
+			manageMore(":input[name='bip_s_zyjn']","skills","bipSZyjn");
+			manageMore(":input[name='bip_s_jsdj']","skills","bipSJsdj");
+			manageMore(":input[name='bip_s_years']","skills","bipSYears");
 			$("form").submit();
 		});
 	});
 </script>
 </head>
 <body>
+
+	<!-- 工种多级选择div -->
+	<div id="chooseGz" style="text-align:center;background-color: #7bbfea;width:500px;height:180px;position: fixed;margin: auto;left: 90;top:0;bottom:0;z-index: 1;display: none;" >
+		<h2 align="center">工种选择：</h2>
+		大&nbsp;&nbsp;&nbsp;&nbsp;类：<select id="gzHy" size="1"  style="WIDTH: 35%"></select>&nbsp;&nbsp;
+		中&nbsp;&nbsp;&nbsp;&nbsp;类：<select id="gz1" size="1"  style="WIDTH: 35%"></select><br><br>
+		小&nbsp;&nbsp;&nbsp;&nbsp;类：<select id="gz2" size="1"  style="WIDTH: 35%"></select>&nbsp;&nbsp;
+		细&nbsp;&nbsp;&nbsp;&nbsp;类：<select id="gz3" size="1"  style="WIDTH: 35%"></select><br><br>
+		工种代码：<input size="1" id="gzDm"  style="WIDTH: 34%" type="text" value="" readonly="readonly">&nbsp;&nbsp;工种名称：<input type="text"  id="gzName" size="1"  style="WIDTH: 34%" value="" readonly="readonly"><br><br>
+		<input type="button" id="btn_gz" value="确定" class="BUTTONS2">
+	</div>
+	
 	<form id="form1" name="form1" action="" method="post">
 		<table width="98%" border="0" align="center" cellpadding="0"
 			cellspacing="0">
@@ -392,11 +689,12 @@
 							<td width="13%" align="right"><span class="redtxt">*</span>身份证号码</td>
 							<td width="20%"><INPUT id="sfzhm" name="bipCitizenid"
 								style="WIDTH: 100%" value="" /><span></span>
+									<!-- 回显操作使用的id -->
 								<input type="text" hidden="true" id="bipId" name="bipId" value=""/>
 								</td>
 							<td width="13%" align="right"><span class="redtxt">*</span>性
 								别</td>
-							<td width="20%"><select name="bipSex" id="xb" size="1" disabled="true"
+							<td width="20%"><select name="bipSex" id="xb" size="1" s
 								style="WIDTH: 100%"></select></td>
 							<td width="13%" align="right">年 龄</td>
 							<td width="20%"><INPUT id="nl" name="bipAge"
@@ -427,7 +725,7 @@
 						<tr class="line2">
 							<td align="right">健康状况</td>
 							<td><select id="jkzk" name="bipJkzk" size="1"
-								style="WIDTH: 100%"></select></td>
+								style="WIDTH: 100%;"></select></td>
 							<td align="right">
 								<table border="0" cellpadding="0" cellspacing="0">
 									<tr class="line2" id="id1">
@@ -617,11 +915,9 @@
 						cellspacing="1">
 						<tr class="line1">
 							<td width="13%" align="right">职业技能
-								<!-- 职业技能id -->
-								<input type="text" hidden="true" id="bipSId" name="skills[0].bipSId" value=""/>
 							</td>
-							<td id="o2" width="19%"><select id="init_zyjn"
-								name="skills[0].bipSZyjn" size="1" style="WIDTH: 100%"></select></td>
+							<td id="o2" width="19%"><select id="init_zyjn" class="gzAddClass"
+								name="skills[0].bipSZyjn" size="1" style="WIDTH: 100%;"></select></td>
 							<td width="11%" align="right">技术等级</td>
 							<td width="18%"><select id="init_jsdj"
 								name="skills[0].bipSJsdj" size="1" style="WIDTH: 100%"></select></td>
@@ -629,11 +925,12 @@
 							<td width="15%"><INPUT id="init_csnx"
 								name="skills[0].bipSYears" style="WIDTH: 100%" maxlength="2"></td>
 							<td width="7%" align="center"><input id="zyjntj"
-								name="zyjntj" type="button" value="添加" class="BUTTON2"></td>
+								name="zyjntj" type="button" value="添加" class="BUTTON2" ></td>
 							<td width="8%" align="center"><input id="zyjnqc"
 								type="button" value="清空" class="BUTTON2"></td>
 						</tr>
 					</table>
+					<div id="panel_1"></div>
 					<div id="language_1">
 						<!-- 外语 div+css+jQuery -->
 						<table id="jywyTable" width="100%" align="center" border="0"
@@ -642,8 +939,6 @@
 
 							<tr class="line2" align="center">
 								<td width="13%" align="right">具有外语
-								<!-- 外语id -->
-								<input type="text" hidden="true" id="bipFlId" name="list[0].bipFlId" value=""/>
 								</td>
 								<td width="19%"><select class="init_jywy" id="init_jywy"
 									name="list[0].bipFlJywy" size="1" style="WIDTH: 100%"></select></td>
@@ -759,49 +1054,44 @@
 				<td valign="bottom">择业工种</td>
 			</tr>
 		</table>
-	<div id="gzParent">
-		<div class="gzDiv">
-					<table width="98%" id="c7" border=0 cellPadding=0 cellSpacing=1
-			align="center" class="tablebody" style="display: block">
-			<tr align="center">
-				<td>
-					<table id="qzgzTable" class="qzgztable" width="100%" border=0 cellPadding=0
-						cellSpacing=1 class="tablebody" style="display: block">
-						<tr class="line1" align="center">
-							<td width="40"><span class="redtxt">*</span>工种
-							<!-- 求职工种编号 -->
-							<input type="text" hidden="true" id="qzgzbh" name="gzList[0].qzgzbh" value=""/>
-							</td>
-							<td id="o1" width="110"><select class="gzName" id="qzgz1"
-								name="gzList[0].gz" size="1" style="WIDTH: 100%"></select></td>
-							<td width="50">用工形式</td>
-							<td width="80"><select class="ygxsName" id="ygxs1"
-								name="gzList[0].ygxs" size="1" style="WIDTH: 100%"></select></td>
-							<td width="50" align="right">月薪</td>
-							<td width="140">
-								<div id="yx" style="display:">
-									<table>
-										<tr>
-											<td><input id="zdyx1" name="gzList[0].zdyx" class="zdyxName" type="text"
-												style="width: 40px" maxlength="6"> 至 <input
-												id="zgyx1" name="gzList[0].zgyx" type="text"
-												style="width: 40px" maxlength="6" class="zgyxName"> 元</td>
-										</tr>
-									</table>
-								</div>
-							</td>
-							<!--  -->
-							<td width="40"><input type="button" id="gztj" name="btn_add_gz"
-								value="添加" class="BUTTON2"></td>
-							<td width="40"><input type="button" id="gzqc" name="btn_add_qc"
-								value="清空" class="BUTTON2"></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-		</div>
-	</div>
+<table width="98%"  id="c7"
+  border=0 cellPadding=0 cellSpacing=1 align="center"   class="tablebody" style="display:block"  >
+  <tr align="center" >
+  	<td>
+		<table id="qzgzTable" width="100%" border=0 cellPadding=0 cellSpacing=1  class="tablebody" style="display:block"  >
+			  <tr class="line1" align="center">
+			    <td width="40"><span class="redtxt">*</span>工种</td>
+				<td id="o1" width="110"><select class="gzAddClass" id="qzgz1" name="gzList[0].gz" size="1"  style="WIDTH: 100%"></select></td >
+			    <td width="50">用工形式</td>
+				<td width="80"><select class="ygxs1" id="ygxs1" name="gzList[0].ygxs" size="1"  style="WIDTH: 100%"></select></td >
+			    <td width="50" align="right">月薪</td>
+				<td width="140">
+					<div id="yx" style="display:">
+					<table><tr><td>
+					<input id="zdyx1" name="gzList[0].zdyx" type="text" style="width:40px" maxlength="6">
+                  	至
+					<input id="zgyx2" name="gzList[0].zgyx" type="text" style="width:40px" maxlength="6" >
+					元</td></tr></table>
+					</div>
+				</td >
+					<!--  -->
+			    <td width="40"><input  type="button" id="gztj" name="gztj" value="添加" class="BUTTON2" ></td >
+			    <td width="40"><input  type="button" id="gzqc" name="gzsc" value="清空" class="BUTTON2"></td >
+			  </tr >
+			</table>
+			
+		</td>
+	</tr>	
+</table>
+<table width="98%"  id="c8"
+  border=0 cellPadding=0 cellSpacing=1 align="center"   class="tablebody" style="display:block"  >
+  <tr align="center" >
+  	<td>
+			<div id="panel_3"></div>
+			
+		</td>
+	</tr>	
+</table>
 		<TABLE width="98%" border=0 cellPadding="0" cellSpacing=1
 			align="center" class="tablebody">
 			<tr align="center">

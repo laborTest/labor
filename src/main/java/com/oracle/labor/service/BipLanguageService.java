@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oracle.labor.common.util.GenerateID;
 import com.oracle.labor.dao.BipForeignlanguageMapper;
 import com.oracle.labor.po.BipForeignlanguage;
 
@@ -30,9 +31,15 @@ public class BipLanguageService {
 	 * @param bfl
 	 */
 	@Transactional
-	public void updateLanguage(List<BipForeignlanguage> list) {
-		for(int i=0;i<list.size();i++) {
-			langDao.updateByPrimaryKeySelective(list.get(i));
+	public void updateLanguage(List<BipForeignlanguage> list,String bipId) {
+		
+		//删除已存在数据
+		langDao.deleteAllByBipId(bipId);
+		//重新插入
+		for (BipForeignlanguage f : list) {
+			f.setBipFlId(GenerateID.getGenerateId());
+			f.setBipId(bipId);
+			langDao.insertSelective(f);
 		}
 	}
 	

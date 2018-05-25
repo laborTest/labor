@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oracle.labor.common.util.GenerateID;
 import com.oracle.labor.dao.ZjGrqzgzbMapper;
 import com.oracle.labor.po.ZjGrqzgzb;
+import com.oracle.labor.po.ZjGrqzgzbExample;
 /**
  * 个人求职工种表维护service
  * @author dingshuangen
@@ -37,10 +39,16 @@ public class GzService {
 	 * @param gz
 	 */
 	@Transactional
-	public void update(List<ZjGrqzgzb> gz) {
+	public void update(List<ZjGrqzgzb> gz,String qzbh) {
 		
-		for(int i=0;i<gz.size();i++) {
-			gzDao.updateByPrimaryKeySelective(gz.get(i));
+		//删除已存在信息
+		ZjGrqzgzbExample e= new ZjGrqzgzbExample();
+		e.createCriteria().andQzbhEqualTo(qzbh).andGdsjIsNull();
+		gzDao.deleteByExample(e);
+		for (ZjGrqzgzb z : gz) {
+			z.setQzbh(qzbh);
+			z.setQzgzbh(GenerateID.getGenerateId());
+			gzDao.insertSelective(z);
 		}
 	}
 	
