@@ -12,59 +12,76 @@
 			src="<%=request.getContextPath()%>/js/jquery-1.11.1.min.js"></script>
 		<script type="text/javascript">
 	$(function(){
-	$("#dwfrm").blur(function(){
-	
 		
-          
+		$("#bioOrgtype").load("../../orgType/0");
+		$("#cdgRegtype").load("../../regType/0");
+		$("#bioIndustry").load("../../industry/0");
+		$("#dwszs").load("../../getRegion/00/province");
+		$("#dwszs").change(function(){
+			var code=$(this).val();
+			if(code&&code.length>=6){
+				$("#dwszq").load("../../getRegion/"+code+"/city");
+				}
 			
-			var frm=$("#dwfrm").val();
+		})
+		
+		$("#dwszq").change(function(){
+			var code=$(this).val();
+			if(code&&code.length>=6){
+			$("#bioRgaRegioncode").load("../../getRegion/"+code+"/village");
+			}
+		})
+		
+		
+	$("#bioNo").blur(function(){
+		
 	
+		var exp = /^\d{16}$/;
+		var frm=$(this).val();
+		if(exp.test(frm)){
+			
+			$.get("",{bioNo:frm},function(data){
+				
+			})
+			
+		}else{
+			$(this).next().html("身份证格式错误".fontcolor("red"));
+			$(this).val("");
+		}
 			$.getJSON("dwdjInfo.do",{frm:frm,code:"blur"},function(data){
 				if(data!=null){
 					
 					if(confirm("用户已存在是否显示该用户")){
 				$("#dwbh").val(data.bio_id);
-				$("#dwqc").val(data.bio_name);
-				$("#dwjc").val(data.bio_shortname);
-				$("#dwxz").val(data.bio_orgtype);
-				$("#dwjjlx").val(data.cdg_regtype);
-				$("#dwhy").val(data.bio_industry);
-				$("#yzbm").val(data.bio_bua_postcode);
-				$("#czjh").val(data.bio_con_fax);
-				$("#email").val(data.bio_con_mail);
-				
-			
+				$("#bioName").val(data.bio_name);
+				$("#bioShortname").val(data.bio_shortname);
+				$("#bioOrgtype").val(data.bio_orgtype);
+				$("#cdgRegtype").val(data.cdg_regtype);
+				$("#bioIndustry").val(data.bio_industry);
+				$("#bioBuaPostcode").val(data.bio_bua_postcode);
+				$("#bioConFax").val(data.bio_con_fax);
+				$("#bioConMail").val(data.bio_con_mail);
+	
 				$.get("dwdjInfo.do",{code:"dwszs",textd:data.bio_rga_regioncode},function(d){
 					
-					$("#dwszj").html(d);
+					$("#bioRgaRegioncode").html(d);
 				});
 			
 				
-				$("#lxdz").val(data.bio_bua_address);
+				$("#bioBuaAddress").val(data.bio_bua_address);
 				}
 				else{
-					$("$dwfrm").val("");
+					$("$bioNo").val("");
 				}
 	}				
 		else{
-			if($("#dwfrm").val()!=""){
+			if($("#bioNo").val()!=""){
 			
 			alert("该单位首次登记请仔细输入信息");
-		}
-		}		
+		 }
+		 }		
 				
-
-
-
-
-
-
-
-				
-				
-			
-			});
-			
+			});		
 			
 		});
 		
@@ -74,77 +91,69 @@
        var regtoo=/[0-9]$/
         
        var regthree=/[_a-z0-9]+@([_a-z0-9]+\.)+[a-z0-9]{2,3}$/;   
-	
-	
 		
-	if($("#dwfrm").val()==""){
+	if($("#bioNo").val()==""){
 				alert("单位法人码不能为空");
 			
 				return;
 			}
-	if($("#lxdz").val()==""){
+	if($("#bioBuaAddress").val()==""){
 			alert("经营地址不能为空");
 			
 		return;
 		}
-		if($("#dwqc").val()==""){
+		if($("#bioName").val()==""){
 			alert("单位全称不能为空");
 			
 			return;
 		}
-		if($("#dwxz").val()==""){
+		if($("#bioOrgtype").val()==""){
 			alert("单位性质不能为空");
 			
 		return;
 		}
-		if($("#dwjjlx").val()==""){
+		if($("#cdgRegtype").val()==""){
 			alert("经济类型不能为空");
 		
 		return;
 		
 		}	
-		if($("#dwhy").val()==""){
+		if($("#bioIndustry").val()==""){
 			alert("单位行业不能为空");
 			
 		return;
 		
 		}	
-		if($("#dwszj").val()==""){
+		if($("#bioRgaRegioncode").val()==""){
 			alert("街区不能为空");
 			
-
 		return;
 		}
-		if(!reg.test(form1.dwfrm.value)){
+		if(!reg.test(form1.bioNo.value)){
 		    alert("单位法人码不允许输入中文");
 		   
 		    return;
 		}
-		if(form1.yzbm.value!=""&&!regtoo.test(form1.yzbm.value)){
+		if(form1.bioBuaPostcode.value!=""&&!regtoo.test(form1.bioBuaPostcode.value)){
 		    alert("邮政编码只允许输入数字！");
 		 
 		    return;
 		}
-		if(form1.czjh.value!=""&&!regtoo.test(form1.czjh.value)){
+		if(form1.bioConFax.value!=""&&!regtoo.test(form1.bioConFax.value)){
 		    alert("传真机号只允许输入数字！");
 		    
 		    return;
 		}
-		if(form1.email.value!=""&&!regthree.test(form1.email.value)){
+		if(form1.bioConMail.value!=""&&!regthree.test(form1.bioConMail.value)){
 		    alert("Email格式输入不正确，请重新输入！");
 		   
 		    return;
-		}
-		
-		
-		
+		}	
 		
 		$("#bc").attr("disabled",true);
-			form1.submit();
-	
+			form1.submit();	
 
 	});
-	
 	
 	});
 
@@ -155,26 +164,26 @@
 $(function(){
 	
 //单位性质
-	$.get("dwdj_1.do",{code:"dwxz"},function(data){
-		$("#dwxz").html(data);
+	$.get("dwdjInfo.do",{code:"bioOrgtype"},function(data){
+		$("#bioOrgtype").html(data);
 	});
 	//单位经济
-	$.get("dwdj_1.do",{code:"dwjjlx"},function(data){
-		$("#dwjjlx").html(data);
+	$.get("dwdjInfo.do",{code:"cdgRegtype"},function(data){
+		$("#cdgRegtype").html(data);
 	});
 	//单位行业
-	$.get("dwdj_1.do",{code:"dwhy"},function(data){
-		$("#dwhy").html(data);
+	$.get("dwdjInfo.do",{code:"bioIndustry"},function(data){
+		$("#bioIndustry").html(data);
 	});
 	
 	//省
-	$.get("dwdj_1.do",{code:"dwszs"},function(data){
+	$.get("dwdjInfo.do",{code:"dwszs"},function(data){
 		var c=$("#dwszs").html(data);
 	});
 	$("#dwszs").change(function(){
 		var p=$("#dwszs").val();
 		
-		$.get("dwdj_1.do",{code:"dwszq",province:p},function(data){
+		$.get("dwdjInfo.do",{code:"dwszq",province:p},function(data){
 		$("#dwszq").html(data);
 		
 		});
@@ -182,17 +191,14 @@ $(function(){
 	});
 	$("#dwszq").change(function(){
 		var c=$("#dwszq").val();
-	$.get("dwdj_1.do",{code:"dwszj",city:c},function(data){
-		$("#dwszj").html(data);
+	$.get("dwdjInfo.do",{code:"bioRgaRegioncode",city:c},function(data){
+		$("#bioRgaRegioncode").html(data);
 	
 	
 	});
 	
 	});
 	
-	
-
-
 });
 
 
@@ -210,7 +216,7 @@ $(function(){
 		var city = form1.dwszq.options[form1.dwszq.selectedIndex].value;
 		createXMLHttpRequest();
 		xmlHttp.onreadystatechange = villageProcessor;
-		xmlHttp.open("get","<%=request.getContextPath()%>/ldlsc/dw/dwdj.do?method=initRegion&obj=village&selectname=dwszj&cityid="+city);
+		xmlHttp.open("get","<%=request.getContextPath()%>/ldlsc/dw/dwdj.do?method=initRegion&obj=village&selectname=bioRgaRegioncode&cityid="+city);
 		xmlHttp.send(null);
 	}
 	function cityProcessor(){
@@ -220,7 +226,7 @@ $(function(){
 				responseText = xmlHttp.responseText;
 				document.all.sqx.removeChild(form1.dwszq);
 				document.all.sqx.innerHTML=responseText;
-				form1.dwszj.innerHTML="";
+				form1.bioRgaRegioncode.innerHTML="";
 			}
 		}
 	}
@@ -229,7 +235,7 @@ $(function(){
 		if(xmlHttp.readyState==4){
 			if(xmlHttp.status==200){
 				responseText = xmlHttp.responseText;
-				document.all.jzx.removeChild(form1.dwszj);
+				document.all.jzx.removeChild(form1.bioRgaRegioncode);
 				document.all.jzx.innerHTML=responseText;
 			}
 		}
@@ -239,17 +245,16 @@ $(function(){
 								
 		form1.bc.disabled=true;
 		form1.fh.disabled=true;
-		form1.action="<%=request.getContextPath()%>
-	/service/zj/dwzp/dwdj_3.jsp";
+
 		form1.submit();
 	}
 	function copyValue() {
-		form1.dwjc.value = form1.dwqc.value;
+		form1.bioShortname.value = form1.bioName.value;
 	}
 </script>
 	</head>
 	<body>
-		<form name="form1" action="dwdjInfo.do" method="post">
+		<form name="form1" action="../../dwdjInfo" method="post">
 			<input type="hidden" name="dwdj" value="dwdj2" />
 			<input type="hidden" name="dwbh" id="dwbh" />
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -309,23 +314,22 @@ $(function(){
 														<span class="redtxt">*</span>单位法人码
 													</td>
 													<td width="18%">
-														<input name="dwfrm" id="dwfrm" style="WIDTH: 100%"
+														<input name="bioNo" id="bioNo" style="WIDTH: 100%"
 															maxlength="32">
 													</td>
 													<td width="13%" align="right">
 														<span class="redtxt">*</span>单位全称
 													</td>
 													<td width="20%">
-														<INPUT name="dwqc" id="dwqc" style="WIDTH: 100%"
-															maxlength="64" value="" onkeyup=
-	copyValue();;
+														<INPUT name="bioName" id="bioName" style="WIDTH: 100%"
+															maxlength="64" value="" 
 >
 													</td>
 													<td width="14%" align="right">
 														单位简称
 													</td>
 													<td width="20%">
-														<INPUT name="dwjc" id="dwjc" style="WIDTH: 100%"
+														<INPUT name="bioShortname" id="bioShortname" style="WIDTH: 100%"
 															maxlength="32" value="">
 													</td>
 												</tr>
@@ -334,7 +338,7 @@ $(function(){
 														<span class="redtxt">*</span>单位性质
 													</td>
 													<td width="18%">
-														<select id="dwxz" name="dwxz" style="WIDTH: 100%;">
+														<select id="bioOrgtype" name="bioOrgtype" style="WIDTH: 100%;">
 
 														</select>
 													</td>
@@ -342,8 +346,7 @@ $(function(){
 														<span class="redtxt">*</span>经济类型
 													</td>
 													<td>
-														<select id="dwjjlx" name="dwjjlx" style="WIDTH: 100%">
-
+														<select id="cdgRegtype" name="cdgRegtype" style="WIDTH: 100%">
 
 														</select>
 													</td>
@@ -351,8 +354,7 @@ $(function(){
 														<span class="redtxt">*</span>单位行业
 													</td>
 													<td>
-														<select id="dwhy" name="dwhy" style="WIDTH: 100%">
-
+														<select id="bioIndustry" name="bioIndustry" style="WIDTH: 100%">
 
 														</select>
 													</td>
@@ -363,21 +365,21 @@ $(function(){
 														邮政编码
 													</td>
 													<td>
-														<INPUT name="yzbm" id="yzbm" style="WIDTH: 100%"
+														<INPUT name="bioBuaPostcode" id="bioBuaPostcode" style="WIDTH: 100%"
 															maxlength="32">
 													</td>
 													<td align="right">
 														传真机号
 													</td>
 													<td>
-														<input name="czjh" id="czjh" style="WIDTH: 100%"
+														<input name="bioConFax" id="bioConFax" style="WIDTH: 100%"
 															maxlength="32" value="">
 													</td>
 													<td align="right">
 														Email
 													</td>
 													<td>
-														<INPUT name="email" id="email" style="WIDTH: 100%"
+														<INPUT name="bioConMail" id="bioConMail" style="WIDTH: 100%"
 															maxlength="64" value="">
 													</td>
 												</tr>
@@ -386,9 +388,7 @@ $(function(){
 														<span class="redtxt">*</span>注册省(市)
 													</td>
 													<td>
-														<select id="dwszs" name="dwszs" style="WIDTH: 100%"
-															onchange="initCity()">
-															${Regioncode }
+														<select id="dwszs" name="dwszs" style="WIDTH: 100%">
 
 														</select>
 													</td>
@@ -404,7 +404,7 @@ $(function(){
 														街(镇\乡)
 													</td>
 													<td id="jzx">
-														<select id="dwszj" name="dwszj" style="WIDTH: 100%">
+														<select id="bioRgaRegioncode" name="bioRgaRegioncode" style="WIDTH: 100%">
 														</select>
 													</td>
 												</tr>
@@ -413,7 +413,7 @@ $(function(){
 														<span class="redtxt">*</span>经营地址
 													</td>
 													<td colspan="5">
-														<INPUT name="lxdz" id="lxdz" style="WIDTH: 100%"
+														<INPUT name="bioBuaAddress" id="bioBuaAddress" style="WIDTH: 100%"
 															maxlength="64" value="">
 													</td>
 												</tr>
